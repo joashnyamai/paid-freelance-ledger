@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,6 +8,7 @@ import { InvoicePreview } from "@/components/InvoicePreview";
 import { Sidebar } from "@/components/Sidebar";
 import { DashboardOverview } from "@/components/DashboardOverview";
 import { toast } from "@/hooks/use-toast";
+import { DatabaseService } from "@/services/database";
 
 export interface Invoice {
   id: string;
@@ -52,77 +52,95 @@ const Index = () => {
   const [showInvoicePreview, setShowInvoicePreview] = useState(false);
   const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
   const [editingInvoice, setEditingInvoice] = useState<Invoice | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  // Load data from localStorage on component mount
+  // Load data from Supabase on component mount
   useEffect(() => {
-    const savedInvoices = localStorage.getItem('invoices');
-    const savedClients = localStorage.getItem('clients');
-    
-    if (savedInvoices) {
-      setInvoices(JSON.parse(savedInvoices));
-    }
-    if (savedClients) {
-      setClients(JSON.parse(savedClients));
-    }
+    const loadData = async () => {
+      try {
+        setLoading(true);
+        const [invoicesData, clientsData] = await Promise.all([
+          DatabaseService.getInvoices(),
+          DatabaseService.getClients()
+        ]);
+        setInvoices(invoicesData);
+        setClients(clientsData);
+      } catch (error) {
+        console.error('Error loading data:', error);
+        toast({
+          title: "Error",
+          description: "Failed to load data from database.",
+          variant: "destructive",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
   }, []);
 
-  // Save data to localStorage whenever invoices or clients change
-  useEffect(() => {
-    localStorage.setItem('invoices', JSON.stringify(invoices));
-  }, [invoices]);
-
-  useEffect(() => {
-    localStorage.setItem('clients', JSON.stringify(clients));
-  }, [clients]);
-
-  const handleCreateInvoice = (invoiceData: Omit<Invoice, 'id' | 'invoiceNumber'>) => {
-    const newInvoice: Invoice = {
-      ...invoiceData,
-      id: Date.now().toString(),
-      invoiceNumber: `INV-${String(invoices.length + 1).padStart(4, '0')}`,
-    };
-    
-    setInvoices(prev => [...prev, newInvoice]);
-    setShowInvoiceForm(false);
-    setEditingInvoice(null);
-    
-    toast({
-      title: "Invoice Created",
-      description: `Invoice ${newInvoice.invoiceNumber} has been created successfully.`,
-    });
+  const handleCreateInvoice = async (invoiceData: Omit<Invoice, 'id' | 'invoiceNumber'>) => {
+    try {
+      const newInvoice = await DatabaseService.addInvoice(invoiceData);
+      setInvoices(prev => [newInvoice, ...prev]);
+      setShowInvoiceForm(false);
+      setEditingInvoice(null);
+      
+      toast({
+        title: "Invoice Created",
+        description: `Invoice ${newInvoice.invoiceNumber} has been created successfully.`,
+      });
+    } catch (error) {
+      console.error('Error creating invoice:', error);
+      toast({
+        title: "Error",
+        description: "Failed to create invoice.",
+        variant: "destructive",
+      });
+    }
   };
 
-  const handleUpdateInvoice = (invoiceData: Omit<Invoice, 'id' | 'invoiceNumber'>) => {
+  const handleUpdateInvoice = async (invoiceData: Omit<Invoice, 'id' | 'invoiceNumber'>) => {
     if (!editingInvoice) return;
     
-    const updatedInvoice: Invoice = {
-      ...invoiceData,
-      id: editingInvoice.id,
-      invoiceNumber: editingInvoice.invoiceNumber,
-    };
-    
-    setInvoices(prev => prev.map(inv => inv.id === editingInvoice.id ? updatedInvoice : inv));
-    setShowInvoiceForm(false);
-    setEditingInvoice(null);
-    
-    toast({
-      title: "Invoice Updated",
-      description: `Invoice ${updatedInvoice.invoiceNumber} has been updated successfully.`,
-    });
+    try {
+      const updatedInvoice = await DatabaseService.updateInvoice(editingInvoice.id, invoiceData);
+      setInvoices(prev => prev.map(inv => inv.id === editingInvoice.id ? updatedInvoice : inv));
+      setShowInvoiceForm(false);
+      setEditingInvoice(null);
+      
+      toast({
+        title: "Invoice Updated",
+        description: `Invoice ${updatedInvoice.invoiceNumber} has been updated successfully.`,
+      });
+    } catch (error) {
+      console.error('Error updating invoice:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update invoice.",
+        variant: "destructive",
+      });
+    }
   };
 
-  const handleAddClient = (clientData: Omit<Client, 'id'>) => {
-    const newClient: Client = {
-      ...clientData,
-      id: Date.now().toString(),
-    };
-    
-    setClients(prev => [...prev, newClient]);
-    
-    toast({
-      title: "Client Added",
-      description: `${newClient.name} has been added to your client list.`,
-    });
+  const handleAddClient = async (clientData: Omit<Client, 'id'>) => {
+    try {
+      const newClient = await DatabaseService.addClient(clientData);
+      setClients(prev => [newClient, ...prev]);
+      
+      toast({
+        title: "Client Added",
+        description: `${newClient.name} has been added to your client list.`,
+      });
+    } catch (error) {
+      console.error('Error adding client:', error);
+      toast({
+        title: "Error",
+        description: "Failed to add client.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleEditInvoice = (invoice: Invoice) => {
@@ -135,15 +153,25 @@ const Index = () => {
     setShowInvoicePreview(true);
   };
 
-  const handleUpdateInvoiceStatus = (invoiceId: string, status: Invoice['status']) => {
-    setInvoices(prev => prev.map(inv => 
-      inv.id === invoiceId ? { ...inv, status } : inv
-    ));
-    
-    toast({
-      title: "Status Updated",
-      description: `Invoice status has been updated to ${status}.`,
-    });
+  const handleUpdateInvoiceStatus = async (invoiceId: string, status: Invoice['status']) => {
+    try {
+      await DatabaseService.updateInvoiceStatus(invoiceId, status);
+      setInvoices(prev => prev.map(inv => 
+        inv.id === invoiceId ? { ...inv, status } : inv
+      ));
+      
+      toast({
+        title: "Status Updated",
+        description: `Invoice status has been updated to ${status}.`,
+      });
+    } catch (error) {
+      console.error('Error updating invoice status:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update invoice status.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleNewInvoice = () => {
@@ -218,6 +246,17 @@ const Index = () => {
         return <DashboardOverview invoices={invoices} />;
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading your invoice portal...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex">
