@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Eye, Edit, Download, MoreHorizontal, Clock, CheckCircle, AlertCircle } from "lucide-react";
+import { Eye, Edit, Download, MoreHorizontal, Clock, CheckCircle, AlertCircle, FileText } from "lucide-react";
 import { Invoice } from "@/pages/Index";
 
 interface InvoiceListProps {

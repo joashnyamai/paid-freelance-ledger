@@ -1,6 +1,5 @@
-
 import { Button } from "@/components/ui/button";
-import { X, Download, Print } from "lucide-react";
+import { X, Download } from "lucide-react";
 import { Invoice } from "@/pages/Index";
 
 interface InvoicePreviewProps {
