@@ -265,7 +265,7 @@ export const InvoiceForm = ({ clients, editingInvoice, onSubmit, onClose }: Invo
                         />
                       </div>
                       <div className="col-span-2">
-                        <Label>Rate ($)</Label>
+                        <Label>Rate (KSH)</Label>
                         <Input
                           type="number"
                           value={item.rate}
@@ -278,7 +278,7 @@ export const InvoiceForm = ({ clients, editingInvoice, onSubmit, onClose }: Invo
                       <div className="col-span-2">
                         <Label>Amount</Label>
                         <Input
-                          value={`$${item.amount.toFixed(2)}`}
+                          value={`KSH ${item.amount.toFixed(2)}`}
                           disabled
                         />
                       </div>
@@ -302,7 +302,7 @@ export const InvoiceForm = ({ clients, editingInvoice, onSubmit, onClose }: Invo
                 <div className="mt-6 space-y-4">
                   <div className="grid grid-cols-2 gap-4 max-w-md ml-auto">
                     <div>
-                      <Label htmlFor="tax">Tax ($)</Label>
+                      <Label htmlFor="tax">Tax (KSH)</Label>
                       <Input
                         id="tax"
                         type="number"
@@ -315,15 +315,15 @@ export const InvoiceForm = ({ clients, editingInvoice, onSubmit, onClose }: Invo
                     <div className="space-y-2">
                       <div className="flex justify-between">
                         <span>Subtotal:</span>
-                        <span>${subtotal.toFixed(2)}</span>
+                        <span>KSH {subtotal.toFixed(2)}</span>
                       </div>
                       <div className="flex justify-between">
                         <span>Tax:</span>
-                        <span>${tax.toFixed(2)}</span>
+                        <span>KSH {tax.toFixed(2)}</span>
                       </div>
                       <div className="flex justify-between font-bold text-lg">
                         <span>Total:</span>
-                        <span>${total.toFixed(2)}</span>
+                        <span>KSH {total.toFixed(2)}</span>
                       </div>
                     </div>
                   </div>

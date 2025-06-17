@@ -50,7 +50,7 @@ export const DashboardOverview = ({ invoices }: DashboardOverviewProps) => {
             <DollarSign className="h-4 w-4 text-green-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-700">${totalRevenue.toFixed(2)}</div>
+            <div className="text-2xl font-bold text-green-700">KSH {totalRevenue.toFixed(2)}</div>
             <p className="text-xs text-green-600">{paidCount} paid invoices</p>
           </CardContent>
         </Card>
@@ -61,7 +61,7 @@ export const DashboardOverview = ({ invoices }: DashboardOverviewProps) => {
             <Clock className="h-4 w-4 text-yellow-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-yellow-700">${pendingRevenue.toFixed(2)}</div>
+            <div className="text-2xl font-bold text-yellow-700">KSH {pendingRevenue.toFixed(2)}</div>
             <p className="text-xs text-yellow-600">{pendingCount} pending invoices</p>
           </CardContent>
         </Card>
@@ -72,7 +72,7 @@ export const DashboardOverview = ({ invoices }: DashboardOverviewProps) => {
             <AlertTriangle className="h-4 w-4 text-red-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-700">${overdueRevenue.toFixed(2)}</div>
+            <div className="text-2xl font-bold text-red-700">KSH {overdueRevenue.toFixed(2)}</div>
             <p className="text-xs text-red-600">{overdueCount} overdue invoices</p>
           </CardContent>
         </Card>
@@ -111,7 +111,7 @@ export const DashboardOverview = ({ invoices }: DashboardOverviewProps) => {
                       <div className="text-sm text-gray-600">{invoice.clientName}</div>
                     </div>
                     <div className="text-right">
-                      <div className="font-medium">${invoice.total.toFixed(2)}</div>
+                      <div className="font-medium">KSH {invoice.total.toFixed(2)}</div>
                       <Badge className={`${getStatusColor(invoice.status)} text-xs`}>
                         {invoice.status}
                       </Badge>

@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { X, Download } from "lucide-react";
 import { Invoice } from "@/pages/Index";
@@ -82,8 +83,8 @@ export const InvoicePreview = ({ invoice, onClose }: InvoicePreviewProps) => {
                 <tr>
                   <td>${item.description}</td>
                   <td class="amount">${item.quantity}</td>
-                  <td class="amount">$${item.rate.toFixed(2)}</td>
-                  <td class="amount">$${item.amount.toFixed(2)}</td>
+                  <td class="amount">KSH ${item.rate.toFixed(2)}</td>
+                  <td class="amount">KSH ${item.amount.toFixed(2)}</td>
                 </tr>
               `).join('')}
             </tbody>
@@ -92,15 +93,15 @@ export const InvoicePreview = ({ invoice, onClose }: InvoicePreviewProps) => {
           <div class="total-section">
             <div class="total-row">
               <span>Subtotal:</span>
-              <span>$${invoice.subtotal.toFixed(2)}</span>
+              <span>KSH ${invoice.subtotal.toFixed(2)}</span>
             </div>
             <div class="total-row">
               <span>Tax:</span>
-              <span>$${invoice.tax.toFixed(2)}</span>
+              <span>KSH ${invoice.tax.toFixed(2)}</span>
             </div>
             <div class="total-row total-final">
               <span>Total:</span>
-              <span>$${invoice.total.toFixed(2)}</span>
+              <span>KSH ${invoice.total.toFixed(2)}</span>
             </div>
           </div>
           
@@ -116,10 +117,6 @@ export const InvoicePreview = ({ invoice, onClose }: InvoicePreviewProps) => {
       printWindow.document.close();
       printWindow.print();
     }
-  };
-
-  const handlePrint = () => {
-    handleDownload();
   };
 
   return (
@@ -199,8 +196,8 @@ export const InvoicePreview = ({ invoice, onClose }: InvoicePreviewProps) => {
                     <tr key={item.id}>
                       <td className="border border-gray-200 px-4 py-3">{item.description}</td>
                       <td className="border border-gray-200 px-4 py-3 text-right">{item.quantity}</td>
-                      <td className="border border-gray-200 px-4 py-3 text-right">${item.rate.toFixed(2)}</td>
-                      <td className="border border-gray-200 px-4 py-3 text-right">${item.amount.toFixed(2)}</td>
+                      <td className="border border-gray-200 px-4 py-3 text-right">KSH {item.rate.toFixed(2)}</td>
+                      <td className="border border-gray-200 px-4 py-3 text-right">KSH {item.amount.toFixed(2)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -213,16 +210,16 @@ export const InvoicePreview = ({ invoice, onClose }: InvoicePreviewProps) => {
                 <div className="space-y-2">
                   <div className="flex justify-between">
                     <span>Subtotal:</span>
-                    <span>${invoice.subtotal.toFixed(2)}</span>
+                    <span>KSH {invoice.subtotal.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Tax:</span>
-                    <span>${invoice.tax.toFixed(2)}</span>
+                    <span>KSH {invoice.tax.toFixed(2)}</span>
                   </div>
                   <div className="border-t-2 border-gray-300 pt-2">
                     <div className="flex justify-between text-lg font-bold">
                       <span>Total:</span>
-                      <span>${invoice.total.toFixed(2)}</span>
+                      <span>KSH {invoice.total.toFixed(2)}</span>
                     </div>
                   </div>
                 </div>
