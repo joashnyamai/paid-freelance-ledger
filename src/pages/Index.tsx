@@ -2,13 +2,12 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
-import { Plus, FileText, Users, Download, Eye, Edit, DollarSign, Clock, CheckCircle } from "lucide-react";
 import { InvoiceForm } from "@/components/InvoiceForm";
 import { InvoiceList } from "@/components/InvoiceList";
 import { ClientList } from "@/components/ClientList";
 import { InvoicePreview } from "@/components/InvoicePreview";
+import { Sidebar } from "@/components/Sidebar";
+import { DashboardOverview } from "@/components/DashboardOverview";
 import { toast } from "@/hooks/use-toast";
 
 export interface Invoice {
@@ -48,6 +47,7 @@ export interface Client {
 const Index = () => {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
+  const [activeTab, setActiveTab] = useState('dashboard');
   const [showInvoiceForm, setShowInvoiceForm] = useState(false);
   const [showInvoicePreview, setShowInvoicePreview] = useState(false);
   const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
@@ -146,103 +146,33 @@ const Index = () => {
     });
   };
 
-  // Calculate dashboard stats
-  const totalRevenue = invoices.filter(inv => inv.status === 'paid').reduce((sum, inv) => sum + inv.total, 0);
-  const pendingRevenue = invoices.filter(inv => inv.status === 'pending').reduce((sum, inv) => sum + inv.total, 0);
-  const overdueRevenue = invoices.filter(inv => inv.status === 'overdue').reduce((sum, inv) => sum + inv.total, 0);
+  const handleNewInvoice = () => {
+    setEditingInvoice(null);
+    setShowInvoiceForm(true);
+  };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Invoice Manager</h1>
-          <p className="text-gray-600">Manage your freelance invoices and track payments</p>
-        </div>
-
-        {/* Dashboard Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <Card className="bg-white shadow-lg border-0">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">Total Revenue</CardTitle>
-              <DollarSign className="h-4 w-4 text-green-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-green-600">${totalRevenue.toFixed(2)}</div>
-              <p className="text-xs text-gray-500">{invoices.filter(inv => inv.status === 'paid').length} paid invoices</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-white shadow-lg border-0">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">Pending</CardTitle>
-              <Clock className="h-4 w-4 text-yellow-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-yellow-600">${pendingRevenue.toFixed(2)}</div>
-              <p className="text-xs text-gray-500">{invoices.filter(inv => inv.status === 'pending').length} pending invoices</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-white shadow-lg border-0">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">Overdue</CardTitle>
-              <Clock className="h-4 w-4 text-red-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-red-600">${overdueRevenue.toFixed(2)}</div>
-              <p className="text-xs text-gray-500">{invoices.filter(inv => inv.status === 'overdue').length} overdue invoices</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-white shadow-lg border-0">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">Clients</CardTitle>
-              <Users className="h-4 w-4 text-blue-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-blue-600">{clients.length}</div>
-              <p className="text-xs text-gray-500">Total clients</p>
-            </CardContent>
-          </Card>
-        </div>
-
-        <Tabs defaultValue="invoices" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 bg-white">
-            <TabsTrigger value="invoices" className="flex items-center gap-2">
-              <FileText className="h-4 w-4" />
-              Invoices
-            </TabsTrigger>
-            <TabsTrigger value="clients" className="flex items-center gap-2">
-              <Users className="h-4 w-4" />
-              Clients
-            </TabsTrigger>
-            <TabsTrigger value="settings" className="flex items-center gap-2">
-              <CheckCircle className="h-4 w-4" />
-              Settings
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="invoices" className="space-y-6">
-            <Card className="bg-white shadow-lg border-0">
-              <CardHeader>
-                <div className="flex justify-between items-center">
-                  <div>
-                    <CardTitle>Invoices</CardTitle>
-                    <CardDescription>Manage your invoices and track payments</CardDescription>
-                  </div>
-                  <Button 
-                    onClick={() => {
-                      setEditingInvoice(null);
-                      setShowInvoiceForm(true);
-                    }}
-                    className="bg-blue-600 hover:bg-blue-700"
-                  >
-                    <Plus className="h-4 w-4 mr-2" />
-                    New Invoice
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent>
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'dashboard':
+        return <DashboardOverview invoices={invoices} />;
+      
+      case 'invoices':
+        return (
+          <div className="space-y-6">
+            <div className="flex justify-between items-center">
+              <div>
+                <h2 className="text-3xl font-bold text-gray-900">Invoices</h2>
+                <p className="text-gray-600">Manage your invoices and track payments</p>
+              </div>
+              <Button 
+                onClick={handleNewInvoice}
+                className="bg-blue-600 hover:bg-blue-700"
+              >
+                New Invoice
+              </Button>
+            </div>
+            <Card className="bg-white shadow-sm border-0">
+              <CardContent className="p-6">
                 <InvoiceList 
                   invoices={invoices}
                   onEditInvoice={handleEditInvoice}
@@ -251,24 +181,58 @@ const Index = () => {
                 />
               </CardContent>
             </Card>
-          </TabsContent>
-
-          <TabsContent value="clients" className="space-y-6">
+          </div>
+        );
+      
+      case 'clients':
+        return (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-3xl font-bold text-gray-900">Clients</h2>
+              <p className="text-gray-600">Manage your client information</p>
+            </div>
             <ClientList clients={clients} onAddClient={handleAddClient} />
-          </TabsContent>
-
-          <TabsContent value="settings" className="space-y-6">
-            <Card className="bg-white shadow-lg border-0">
+          </div>
+        );
+      
+      case 'settings':
+        return (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-3xl font-bold text-gray-900">Settings</h2>
+              <p className="text-gray-600">Configure your invoice portal</p>
+            </div>
+            <Card className="bg-white shadow-sm border-0">
               <CardHeader>
-                <CardTitle>Settings</CardTitle>
-                <CardDescription>Configure your invoice settings</CardDescription>
+                <CardTitle>Portal Settings</CardTitle>
+                <CardDescription>Customize your invoice management experience</CardDescription>
               </CardHeader>
               <CardContent>
                 <p className="text-gray-600">Settings panel coming soon...</p>
               </CardContent>
             </Card>
-          </TabsContent>
-        </Tabs>
+          </div>
+        );
+      
+      default:
+        return <DashboardOverview invoices={invoices} />;
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex">
+      {/* Sidebar */}
+      <Sidebar 
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        onNewInvoice={handleNewInvoice}
+        invoiceCount={invoices.length}
+        clientCount={clients.length}
+      />
+
+      {/* Main Content */}
+      <div className="flex-1 p-8">
+        {renderContent()}
       </div>
 
       {/* Invoice Form Modal */}
