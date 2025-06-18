@@ -12,10 +12,12 @@ interface DashboardOverviewProps {
 export const DashboardOverview = ({ invoices }: DashboardOverviewProps) => {
   const totalRevenue = invoices.filter(inv => inv.status === 'paid').reduce((sum, inv) => sum + inv.total, 0);
   const pendingRevenue = invoices.filter(inv => inv.status === 'pending').reduce((sum, inv) => sum + inv.total, 0);
+  const partialRevenue = invoices.filter(inv => inv.status === 'partially_paid').reduce((sum, inv) => sum + (inv.amountPaid || 0), 0);
   const overdueRevenue = invoices.filter(inv => inv.status === 'overdue').reduce((sum, inv) => sum + inv.total, 0);
   
   const paidCount = invoices.filter(inv => inv.status === 'paid').length;
   const pendingCount = invoices.filter(inv => inv.status === 'pending').length;
+  const partialCount = invoices.filter(inv => inv.status === 'partially_paid').length;
   const overdueCount = invoices.filter(inv => inv.status === 'overdue').length;
 
   const recentInvoices = invoices
@@ -28,6 +30,8 @@ export const DashboardOverview = ({ invoices }: DashboardOverviewProps) => {
         return 'bg-green-100 text-green-800 border-green-200';
       case 'pending':
         return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'partially_paid':
+        return 'bg-blue-100 text-blue-800 border-blue-200';
       case 'overdue':
         return 'bg-red-100 text-red-800 border-red-200';
       default:
@@ -43,7 +47,7 @@ export const DashboardOverview = ({ invoices }: DashboardOverviewProps) => {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
         <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-green-800">Total Revenue</CardTitle>
@@ -66,6 +70,17 @@ export const DashboardOverview = ({ invoices }: DashboardOverviewProps) => {
           </CardContent>
         </Card>
 
+        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-blue-800">Partial Payments</CardTitle>
+            <DollarSign className="h-4 w-4 text-blue-600" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-blue-700">KSH {partialRevenue.toFixed(2)}</div>
+            <p className="text-xs text-blue-600">{partialCount} partially paid</p>
+          </CardContent>
+        </Card>
+
         <Card className="bg-gradient-to-br from-red-50 to-red-100 border-red-200">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-red-800">Overdue</CardTitle>
@@ -77,14 +92,14 @@ export const DashboardOverview = ({ invoices }: DashboardOverviewProps) => {
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+        <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-blue-800">This Month</CardTitle>
-            <TrendingUp className="h-4 w-4 text-blue-600" />
+            <CardTitle className="text-sm font-medium text-purple-800">This Month</CardTitle>
+            <TrendingUp className="h-4 w-4 text-purple-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-700">{invoices.length}</div>
-            <p className="text-xs text-blue-600">Total invoices</p>
+            <div className="text-2xl font-bold text-purple-700">{invoices.length}</div>
+            <p className="text-xs text-purple-600">Total invoices</p>
           </CardContent>
         </Card>
       </div>
@@ -113,7 +128,8 @@ export const DashboardOverview = ({ invoices }: DashboardOverviewProps) => {
                     <div className="text-right">
                       <div className="font-medium">KSH {invoice.total.toFixed(2)}</div>
                       <Badge className={`${getStatusColor(invoice.status)} text-xs`}>
-                        {invoice.status}
+                        {invoice.status === 'partially_paid' ? 'Partial' : 
+                         invoice.status.charAt(0).toUpperCase() + invoice.status.slice(1)}
                       </Badge>
                     </div>
                   </div>
