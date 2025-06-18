@@ -104,6 +104,8 @@ export const InvoiceForm = ({ clients, editingInvoice, onSubmit, onClose }: Invo
       subtotal,
       tax,
       total,
+      amountPaid: editingInvoice?.amountPaid || 0,
+      balance: editingInvoice?.balance || total,
     };
     
     onSubmit(invoice);
