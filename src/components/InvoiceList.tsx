@@ -1,9 +1,8 @@
-
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Eye, Edit, Download, MoreHorizontal, Clock, CheckCircle, AlertCircle, FileText, DollarSign } from "lucide-react";
+import { Eye, Edit, Download, MoreHorizontal, Clock, CheckCircle, AlertCircle, FileText, DollarSign, Trash2 } from "lucide-react";
 import { Invoice } from "@/pages/Index";
 
 interface InvoiceListProps {
@@ -11,9 +10,10 @@ interface InvoiceListProps {
   onEditInvoice: (invoice: Invoice) => void;
   onViewInvoice: (invoice: Invoice) => void;
   onUpdateStatus: (invoiceId: string, status: Invoice['status']) => void;
+  onDeleteInvoice: (invoiceId: string) => void;
 }
 
-export const InvoiceList = ({ invoices, onEditInvoice, onViewInvoice, onUpdateStatus }: InvoiceListProps) => {
+export const InvoiceList = ({ invoices, onEditInvoice, onViewInvoice, onUpdateStatus, onDeleteInvoice }: InvoiceListProps) => {
   const getStatusColor = (status: Invoice['status']) => {
     switch (status) {
       case 'paid':
@@ -136,6 +136,13 @@ export const InvoiceList = ({ invoices, onEditInvoice, onViewInvoice, onUpdateSt
                         Mark as Overdue
                       </DropdownMenuItem>
                     )}
+                    <DropdownMenuItem 
+                      onClick={() => onDeleteInvoice(invoice.id)}
+                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                    >
+                      <Trash2 className="mr-2 h-4 w-4" />
+                      Delete Invoice
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </TableCell>

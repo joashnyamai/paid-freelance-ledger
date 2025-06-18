@@ -1,4 +1,3 @@
-
 import { Invoice, Client, InvoiceItem } from '@/pages/Index'
 
 export class DatabaseService {
@@ -83,6 +82,13 @@ export class DatabaseService {
     const updatedInvoices = invoices.map(inv => 
       inv.id === invoiceId ? { ...inv, status } : inv
     )
+    
+    localStorage.setItem('invoiceApp_invoices', JSON.stringify(updatedInvoices))
+  }
+
+  static async deleteInvoice(invoiceId: string): Promise<void> {
+    const invoices = await this.getInvoices()
+    const updatedInvoices = invoices.filter(inv => inv.id !== invoiceId)
     
     localStorage.setItem('invoiceApp_invoices', JSON.stringify(updatedInvoices))
   }

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -177,6 +176,25 @@ const Index = () => {
     }
   };
 
+  const handleDeleteInvoice = async (invoiceId: string) => {
+    try {
+      await DatabaseService.deleteInvoice(invoiceId);
+      setInvoices(prev => prev.filter(inv => inv.id !== invoiceId));
+      
+      toast({
+        title: "Invoice Deleted",
+        description: "Invoice has been successfully deleted.",
+      });
+    } catch (error) {
+      console.error('Error deleting invoice:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete invoice.",
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleAddPayment = async (invoiceId: string, paymentAmount: number) => {
     try {
       await DatabaseService.addPayment(invoiceId, paymentAmount);
@@ -229,6 +247,7 @@ const Index = () => {
                   onEditInvoice={handleEditInvoice}
                   onViewInvoice={handleViewInvoice}
                   onUpdateStatus={handleUpdateInvoiceStatus}
+                  onDeleteInvoice={handleDeleteInvoice}
                 />
               </CardContent>
             </Card>
