@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Eye, Edit, Download, MoreHorizontal, Clock, CheckCircle, AlertCircle, FileText } from "lucide-react";
+import { Eye, Edit, Download, MoreHorizontal, Clock, CheckCircle, AlertCircle, FileText, DollarSign } from "lucide-react";
 import { Invoice } from "@/pages/Index";
 
 interface InvoiceListProps {
@@ -20,6 +20,8 @@ export const InvoiceList = ({ invoices, onEditInvoice, onViewInvoice, onUpdateSt
         return 'bg-green-100 text-green-800 border-green-200';
       case 'pending':
         return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'partially_paid':
+        return 'bg-blue-100 text-blue-800 border-blue-200';
       case 'overdue':
         return 'bg-red-100 text-red-800 border-red-200';
       default:
@@ -33,6 +35,8 @@ export const InvoiceList = ({ invoices, onEditInvoice, onViewInvoice, onUpdateSt
         return <CheckCircle className="h-3 w-3" />;
       case 'pending':
         return <Clock className="h-3 w-3" />;
+      case 'partially_paid':
+        return <DollarSign className="h-3 w-3" />;
       case 'overdue':
         return <AlertCircle className="h-3 w-3" />;
       default:
@@ -65,7 +69,9 @@ export const InvoiceList = ({ invoices, onEditInvoice, onViewInvoice, onUpdateSt
             <TableHead>Client</TableHead>
             <TableHead>Issue Date</TableHead>
             <TableHead>Due Date</TableHead>
-            <TableHead>Amount</TableHead>
+            <TableHead>Total</TableHead>
+            <TableHead>Paid</TableHead>
+            <TableHead>Balance</TableHead>
             <TableHead>Status</TableHead>
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
@@ -82,11 +88,18 @@ export const InvoiceList = ({ invoices, onEditInvoice, onViewInvoice, onUpdateSt
               </TableCell>
               <TableCell>{formatDate(invoice.issueDate)}</TableCell>
               <TableCell>{formatDate(invoice.dueDate)}</TableCell>
-              <TableCell className="font-medium">${invoice.total.toFixed(2)}</TableCell>
+              <TableCell className="font-medium">KSH {invoice.total.toFixed(2)}</TableCell>
+              <TableCell className="font-medium text-green-600">
+                KSH {(invoice.amountPaid || 0).toFixed(2)}
+              </TableCell>
+              <TableCell className="font-medium text-red-600">
+                KSH {(invoice.balance || invoice.total).toFixed(2)}
+              </TableCell>
               <TableCell>
                 <Badge className={`${getStatusColor(invoice.status)} flex items-center gap-1 w-fit`}>
                   {getStatusIcon(invoice.status)}
-                  {invoice.status.charAt(0).toUpperCase() + invoice.status.slice(1)}
+                  {invoice.status === 'partially_paid' ? 'Partial' : 
+                   invoice.status.charAt(0).toUpperCase() + invoice.status.slice(1)}
                 </Badge>
               </TableCell>
               <TableCell className="text-right">
@@ -99,7 +112,7 @@ export const InvoiceList = ({ invoices, onEditInvoice, onViewInvoice, onUpdateSt
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem onClick={() => onViewInvoice(invoice)}>
                       <Eye className="mr-2 h-4 w-4" />
-                      View & Download
+                      View & Add Payment
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => onEditInvoice(invoice)}>
                       <Edit className="mr-2 h-4 w-4" />

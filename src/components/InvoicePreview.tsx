@@ -1,14 +1,15 @@
-
 import { Button } from "@/components/ui/button";
 import { X, Download } from "lucide-react";
 import { Invoice } from "@/pages/Index";
+import { PaymentForm } from "./PaymentForm";
 
 interface InvoicePreviewProps {
   invoice: Invoice;
   onClose: () => void;
+  onAddPayment: (invoiceId: string, amount: number) => void;
 }
 
-export const InvoicePreview = ({ invoice, onClose }: InvoicePreviewProps) => {
+export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePreviewProps) => {
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -142,13 +143,15 @@ export const InvoicePreview = ({ invoice, onClose }: InvoicePreviewProps) => {
             <div className="border-b-2 border-blue-600 pb-6 mb-8">
               <h1 className="text-4xl font-bold text-blue-600 mb-2">INVOICE</h1>
               <div className="text-lg text-gray-600">{invoice.invoiceNumber}</div>
-              <div className="mt-2">
+              <div className="mt-2 flex gap-2">
                 <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
                   invoice.status === 'paid' ? 'bg-green-100 text-green-800' :
                   invoice.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                  invoice.status === 'partially_paid' ? 'bg-blue-100 text-blue-800' :
                   'bg-red-100 text-red-800'
                 }`}>
-                  {invoice.status.toUpperCase()}
+                  {invoice.status === 'partially_paid' ? 'PARTIALLY PAID' : 
+                   invoice.status.toUpperCase()}
                 </span>
               </div>
             </div>
@@ -222,6 +225,14 @@ export const InvoicePreview = ({ invoice, onClose }: InvoicePreviewProps) => {
                       <span>KSH {invoice.total.toFixed(2)}</span>
                     </div>
                   </div>
+                  <div className="flex justify-between text-green-600 font-medium">
+                    <span>Amount Paid:</span>
+                    <span>KSH {(invoice.amountPaid || 0).toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between text-red-600 font-bold text-lg border-t pt-2">
+                    <span>Balance Due:</span>
+                    <span>KSH {(invoice.balance || invoice.total).toFixed(2)}</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -236,6 +247,9 @@ export const InvoicePreview = ({ invoice, onClose }: InvoicePreviewProps) => {
               </div>
             )}
           </div>
+
+          {/* Payment Form */}
+          <PaymentForm invoice={invoice} onAddPayment={onAddPayment} />
         </div>
       </div>
     </div>

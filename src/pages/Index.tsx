@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -23,7 +24,9 @@ export interface Invoice {
   subtotal: number;
   tax: number;
   total: number;
-  status: 'pending' | 'paid' | 'overdue';
+  amountPaid: number;
+  balance: number;
+  status: 'pending' | 'paid' | 'overdue' | 'partially_paid';
   notes?: string;
 }
 
@@ -174,6 +177,26 @@ const Index = () => {
     }
   };
 
+  const handleAddPayment = async (invoiceId: string, paymentAmount: number) => {
+    try {
+      await DatabaseService.addPayment(invoiceId, paymentAmount);
+      const updatedInvoices = await DatabaseService.getInvoices();
+      setInvoices(updatedInvoices);
+      
+      toast({
+        title: "Payment Added",
+        description: `Payment of KSH ${paymentAmount.toFixed(2)} has been recorded.`,
+      });
+    } catch (error) {
+      console.error('Error adding payment:', error);
+      toast({
+        title: "Error",
+        description: "Failed to add payment.",
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleNewInvoice = () => {
     setEditingInvoice(null);
     setShowInvoiceForm(true);
@@ -295,6 +318,7 @@ const Index = () => {
             setShowInvoicePreview(false);
             setSelectedInvoice(null);
           }}
+          onAddPayment={handleAddPayment}
         />
       )}
     </div>

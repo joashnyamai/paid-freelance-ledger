@@ -37,6 +37,8 @@ export class DatabaseService {
       ...invoiceData,
       id: crypto.randomUUID(),
       invoiceNumber,
+      amountPaid: 0,
+      balance: invoiceData.total,
       items: invoiceData.items.map(item => ({
         ...item,
         id: crypto.randomUUID()
@@ -60,6 +62,7 @@ export class DatabaseService {
     const updatedInvoice = {
       ...existingInvoice,
       ...invoiceData,
+      balance: invoiceData.total - (existingInvoice.amountPaid || 0),
       items: invoiceData.items.map(item => ({
         ...item,
         id: item.id || crypto.randomUUID()
@@ -80,6 +83,33 @@ export class DatabaseService {
     const updatedInvoices = invoices.map(inv => 
       inv.id === invoiceId ? { ...inv, status } : inv
     )
+    
+    localStorage.setItem('invoiceApp_invoices', JSON.stringify(updatedInvoices))
+  }
+
+  static async addPayment(invoiceId: string, paymentAmount: number): Promise<void> {
+    const invoices = await this.getInvoices()
+    const updatedInvoices = invoices.map(inv => {
+      if (inv.id === invoiceId) {
+        const newAmountPaid = (inv.amountPaid || 0) + paymentAmount
+        const newBalance = inv.total - newAmountPaid
+        
+        let newStatus: Invoice['status'] = inv.status
+        if (newBalance <= 0) {
+          newStatus = 'paid'
+        } else if (newAmountPaid > 0 && newBalance > 0) {
+          newStatus = 'partially_paid'
+        }
+        
+        return {
+          ...inv,
+          amountPaid: newAmountPaid,
+          balance: Math.max(0, newBalance),
+          status: newStatus
+        }
+      }
+      return inv
+    })
     
     localStorage.setItem('invoiceApp_invoices', JSON.stringify(updatedInvoices))
   }
