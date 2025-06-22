@@ -6,35 +6,17 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
-
-interface Preferences {
-  darkMode: boolean;
-  emailNotifications: boolean;
-  autoSave: boolean;
-  defaultView: string;
-  compactMode: boolean;
-  showTutorials: boolean;
-}
+import { useSettings, Preferences } from "@/hooks/useSettings";
 
 export const SettingsPreferences = () => {
-  const [preferences, setPreferences] = useState<Preferences>(() => {
-    const saved = localStorage.getItem('invoiceApp_preferences');
-    return saved ? JSON.parse(saved) : {
-      darkMode: false,
-      emailNotifications: true,
-      autoSave: true,
-      defaultView: "dashboard",
-      compactMode: false,
-      showTutorials: true
-    };
-  });
-
+  const { preferences, updatePreferences } = useSettings();
+  const [formData, setFormData] = useState<Preferences>(preferences);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSave = async () => {
     setIsLoading(true);
     try {
-      localStorage.setItem('invoiceApp_preferences', JSON.stringify(preferences));
+      updatePreferences(formData);
       toast({
         title: "Preferences Updated",
         description: "Your application preferences have been saved successfully.",
@@ -51,7 +33,7 @@ export const SettingsPreferences = () => {
   };
 
   const handleChange = (field: keyof Preferences, value: any) => {
-    setPreferences(prev => ({ ...prev, [field]: value }));
+    setFormData(prev => ({ ...prev, [field]: value }));
   };
 
   const handleExportData = () => {
@@ -105,7 +87,7 @@ export const SettingsPreferences = () => {
               <p className="text-sm text-gray-500">Enable dark theme for the application</p>
             </div>
             <Switch
-              checked={preferences.darkMode}
+              checked={formData.darkMode}
               onCheckedChange={(checked) => handleChange("darkMode", checked)}
             />
           </div>
@@ -116,7 +98,7 @@ export const SettingsPreferences = () => {
               <p className="text-sm text-gray-500">Receive notifications about overdue invoices</p>
             </div>
             <Switch
-              checked={preferences.emailNotifications}
+              checked={formData.emailNotifications}
               onCheckedChange={(checked) => handleChange("emailNotifications", checked)}
             />
           </div>
@@ -127,7 +109,7 @@ export const SettingsPreferences = () => {
               <p className="text-sm text-gray-500">Automatically save changes as you type</p>
             </div>
             <Switch
-              checked={preferences.autoSave}
+              checked={formData.autoSave}
               onCheckedChange={(checked) => handleChange("autoSave", checked)}
             />
           </div>
@@ -138,7 +120,7 @@ export const SettingsPreferences = () => {
               <p className="text-sm text-gray-500">Show more information in less space</p>
             </div>
             <Switch
-              checked={preferences.compactMode}
+              checked={formData.compactMode}
               onCheckedChange={(checked) => handleChange("compactMode", checked)}
             />
           </div>
@@ -149,7 +131,7 @@ export const SettingsPreferences = () => {
               <p className="text-sm text-gray-500">Display helpful tips and tutorials</p>
             </div>
             <Switch
-              checked={preferences.showTutorials}
+              checked={formData.showTutorials}
               onCheckedChange={(checked) => handleChange("showTutorials", checked)}
             />
           </div>
@@ -157,7 +139,7 @@ export const SettingsPreferences = () => {
           <div className="space-y-2">
             <Label>Default Landing Page</Label>
             <Select
-              value={preferences.defaultView}
+              value={formData.defaultView}
               onValueChange={(value) => handleChange("defaultView", value)}
             >
               <SelectTrigger>

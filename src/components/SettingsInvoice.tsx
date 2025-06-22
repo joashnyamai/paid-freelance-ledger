@@ -8,37 +8,17 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
-
-interface InvoiceSettings {
-  defaultTax: number;
-  currency: string;
-  paymentTerms: number;
-  defaultNotes: string;
-  includeSignature: boolean;
-  logoUrl: string;
-  invoicePrefix: string;
-}
+import { useSettings, InvoiceSettings } from "@/hooks/useSettings";
 
 export const SettingsInvoice = () => {
-  const [settings, setSettings] = useState<InvoiceSettings>(() => {
-    const saved = localStorage.getItem('invoiceApp_invoiceSettings');
-    return saved ? JSON.parse(saved) : {
-      defaultTax: 16,
-      currency: "KSH",
-      paymentTerms: 30,
-      defaultNotes: "Thank you for your business!",
-      includeSignature: false,
-      logoUrl: "",
-      invoicePrefix: "INV"
-    };
-  });
-
+  const { invoiceSettings, updateInvoiceSettings } = useSettings();
+  const [formData, setFormData] = useState<InvoiceSettings>(invoiceSettings);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSave = async () => {
     setIsLoading(true);
     try {
-      localStorage.setItem('invoiceApp_invoiceSettings', JSON.stringify(settings));
+      updateInvoiceSettings(formData);
       toast({
         title: "Invoice Settings Updated",
         description: "Your invoice preferences have been saved successfully.",
@@ -55,7 +35,7 @@ export const SettingsInvoice = () => {
   };
 
   const handleChange = (field: keyof InvoiceSettings, value: any) => {
-    setSettings(prev => ({ ...prev, [field]: value }));
+    setFormData(prev => ({ ...prev, [field]: value }));
   };
 
   return (
@@ -71,7 +51,7 @@ export const SettingsInvoice = () => {
             <Input
               id="defaultTax"
               type="number"
-              value={settings.defaultTax}
+              value={formData.defaultTax}
               onChange={(e) => handleChange("defaultTax", parseFloat(e.target.value) || 0)}
               placeholder="16"
             />
@@ -79,7 +59,7 @@ export const SettingsInvoice = () => {
           <div className="space-y-2">
             <Label htmlFor="currency">Currency</Label>
             <Select
-              value={settings.currency}
+              value={formData.currency}
               onValueChange={(value) => handleChange("currency", value)}
             >
               <SelectTrigger>
@@ -98,7 +78,7 @@ export const SettingsInvoice = () => {
             <Input
               id="paymentTerms"
               type="number"
-              value={settings.paymentTerms}
+              value={formData.paymentTerms}
               onChange={(e) => handleChange("paymentTerms", parseInt(e.target.value) || 30)}
               placeholder="30"
             />
@@ -107,7 +87,7 @@ export const SettingsInvoice = () => {
             <Label htmlFor="invoicePrefix">Invoice Number Prefix</Label>
             <Input
               id="invoicePrefix"
-              value={settings.invoicePrefix}
+              value={formData.invoicePrefix}
               onChange={(e) => handleChange("invoicePrefix", e.target.value)}
               placeholder="INV"
             />
@@ -117,7 +97,7 @@ export const SettingsInvoice = () => {
           <Label htmlFor="logoUrl">Logo URL (Optional)</Label>
           <Input
             id="logoUrl"
-            value={settings.logoUrl}
+            value={formData.logoUrl}
             onChange={(e) => handleChange("logoUrl", e.target.value)}
             placeholder="https://example.com/logo.png"
           />
@@ -126,7 +106,7 @@ export const SettingsInvoice = () => {
           <Label htmlFor="defaultNotes">Default Invoice Notes</Label>
           <Textarea
             id="defaultNotes"
-            value={settings.defaultNotes}
+            value={formData.defaultNotes}
             onChange={(e) => handleChange("defaultNotes", e.target.value)}
             placeholder="Thank you for your business!"
             rows={3}
@@ -135,7 +115,7 @@ export const SettingsInvoice = () => {
         <div className="flex items-center space-x-2">
           <Switch
             id="includeSignature"
-            checked={settings.includeSignature}
+            checked={formData.includeSignature}
             onCheckedChange={(checked) => handleChange("includeSignature", checked)}
           />
           <Label htmlFor="includeSignature">Include digital signature space on invoices</Label>

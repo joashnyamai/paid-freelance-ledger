@@ -6,37 +6,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
-
-interface ProfileData {
-  businessName: string;
-  ownerName: string;
-  email: string;
-  phone: string;
-  address: string;
-  website: string;
-  taxId: string;
-}
+import { useSettings, ProfileData } from "@/hooks/useSettings";
 
 export const SettingsProfile = () => {
-  const [profile, setProfile] = useState<ProfileData>(() => {
-    const saved = localStorage.getItem('invoiceApp_profile');
-    return saved ? JSON.parse(saved) : {
-      businessName: "",
-      ownerName: "",
-      email: "",
-      phone: "",
-      address: "",
-      website: "",
-      taxId: ""
-    };
-  });
-
+  const { profile, updateProfile } = useSettings();
+  const [formData, setFormData] = useState<ProfileData>(profile);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSave = async () => {
     setIsLoading(true);
     try {
-      localStorage.setItem('invoiceApp_profile', JSON.stringify(profile));
+      updateProfile(formData);
       toast({
         title: "Profile Updated",
         description: "Your business profile has been saved successfully.",
@@ -53,7 +33,7 @@ export const SettingsProfile = () => {
   };
 
   const handleChange = (field: keyof ProfileData, value: string) => {
-    setProfile(prev => ({ ...prev, [field]: value }));
+    setFormData(prev => ({ ...prev, [field]: value }));
   };
 
   return (
@@ -68,7 +48,7 @@ export const SettingsProfile = () => {
             <Label htmlFor="businessName">Business Name</Label>
             <Input
               id="businessName"
-              value={profile.businessName}
+              value={formData.businessName}
               onChange={(e) => handleChange("businessName", e.target.value)}
               placeholder="Your Business Name"
             />
@@ -77,7 +57,7 @@ export const SettingsProfile = () => {
             <Label htmlFor="ownerName">Owner Name</Label>
             <Input
               id="ownerName"
-              value={profile.ownerName}
+              value={formData.ownerName}
               onChange={(e) => handleChange("ownerName", e.target.value)}
               placeholder="Your Full Name"
             />
@@ -87,7 +67,7 @@ export const SettingsProfile = () => {
             <Input
               id="email"
               type="email"
-              value={profile.email}
+              value={formData.email}
               onChange={(e) => handleChange("email", e.target.value)}
               placeholder="business@example.com"
             />
@@ -96,7 +76,7 @@ export const SettingsProfile = () => {
             <Label htmlFor="phone">Phone</Label>
             <Input
               id="phone"
-              value={profile.phone}
+              value={formData.phone}
               onChange={(e) => handleChange("phone", e.target.value)}
               placeholder="+254 xxx xxx xxx"
             />
@@ -105,7 +85,7 @@ export const SettingsProfile = () => {
             <Label htmlFor="website">Website</Label>
             <Input
               id="website"
-              value={profile.website}
+              value={formData.website}
               onChange={(e) => handleChange("website", e.target.value)}
               placeholder="https://yourwebsite.com"
             />
@@ -114,7 +94,7 @@ export const SettingsProfile = () => {
             <Label htmlFor="taxId">Tax ID / PIN</Label>
             <Input
               id="taxId"
-              value={profile.taxId}
+              value={formData.taxId}
               onChange={(e) => handleChange("taxId", e.target.value)}
               placeholder="Your Tax ID or PIN"
             />
@@ -124,7 +104,7 @@ export const SettingsProfile = () => {
           <Label htmlFor="address">Business Address</Label>
           <Textarea
             id="address"
-            value={profile.address}
+            value={formData.address}
             onChange={(e) => handleChange("address", e.target.value)}
             placeholder="Your complete business address"
             rows={3}

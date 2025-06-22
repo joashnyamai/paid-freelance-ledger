@@ -13,6 +13,7 @@ import { SettingsProfile } from "@/components/SettingsProfile";
 import { SettingsInvoice } from "@/components/SettingsInvoice";
 import { SettingsPreferences } from "@/components/SettingsPreferences";
 import { toast } from "@/hooks/use-toast";
+import { useSettings } from "@/hooks/useSettings";
 import { DatabaseService } from "@/services/database";
 
 export interface Invoice {
@@ -52,6 +53,7 @@ export interface Client {
 }
 
 const Index = () => {
+  const { preferences, invoiceSettings, profile } = useSettings();
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -91,6 +93,13 @@ const Index = () => {
 
     loadData();
   }, []);
+
+  // Set initial tab based on preferences
+  useEffect(() => {
+    if (preferences.defaultView && activeTab === 'dashboard') {
+      setActiveTab(preferences.defaultView);
+    }
+  }, [preferences.defaultView]);
 
   const filteredInvoices = useMemo(() => {
     return invoices.filter(invoice => {
@@ -367,7 +376,9 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex">
+    <div className={`min-h-screen ${preferences.compactMode ? 'text-sm' : ''} ${
+      preferences.darkMode ? 'dark bg-gray-900' : 'bg-gradient-to-br from-gray-50 to-gray-100'
+    } flex`}>
       {/* Sidebar */}
       <Sidebar 
         activeTab={activeTab}
@@ -381,6 +392,14 @@ const Index = () => {
       <div className="flex-1 p-8">
         {renderContent()}
       </div>
+
+      {/* Show business info in header if configured */}
+      {profile.businessName && (
+        <div className="fixed top-4 right-4 bg-white dark:bg-gray-800 rounded-lg shadow-md p-3 text-sm">
+          <div className="font-semibold">{profile.businessName}</div>
+          {profile.ownerName && <div className="text-gray-600 dark:text-gray-400">{profile.ownerName}</div>}
+        </div>
+      )}
 
       {/* Invoice Form Modal */}
       {showInvoiceForm && (
