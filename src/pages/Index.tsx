@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { InvoiceForm } from "@/components/InvoiceForm";
 import { InvoiceList } from "@/components/InvoiceList";
 import { InvoiceFilter, FilterState } from "@/components/InvoiceFilter";
@@ -8,6 +9,9 @@ import { ClientList } from "@/components/ClientList";
 import { InvoicePreview } from "@/components/InvoicePreview";
 import { Sidebar } from "@/components/Sidebar";
 import { DashboardOverview } from "@/components/DashboardOverview";
+import { SettingsProfile } from "@/components/SettingsProfile";
+import { SettingsInvoice } from "@/components/SettingsInvoice";
+import { SettingsPreferences } from "@/components/SettingsPreferences";
 import { toast } from "@/hooks/use-toast";
 import { DatabaseService } from "@/services/database";
 
@@ -327,15 +331,22 @@ const Index = () => {
               <h2 className="text-3xl font-bold text-gray-900">Settings</h2>
               <p className="text-gray-600">Configure your invoice portal</p>
             </div>
-            <Card className="bg-white shadow-sm border-0">
-              <CardHeader>
-                <CardTitle>Portal Settings</CardTitle>
-                <CardDescription>Customize your invoice management experience</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">Settings panel coming soon...</p>
-              </CardContent>
-            </Card>
+            <Tabs defaultValue="profile" className="w-full">
+              <TabsList className="grid w-full grid-cols-3">
+                <TabsTrigger value="profile">Business Profile</TabsTrigger>
+                <TabsTrigger value="invoice">Invoice Settings</TabsTrigger>
+                <TabsTrigger value="preferences">Preferences</TabsTrigger>
+              </TabsList>
+              <TabsContent value="profile" className="mt-6">
+                <SettingsProfile />
+              </TabsContent>
+              <TabsContent value="invoice" className="mt-6">
+                <SettingsInvoice />
+              </TabsContent>
+              <TabsContent value="preferences" className="mt-6">
+                <SettingsPreferences />
+              </TabsContent>
+            </Tabs>
           </div>
         );
       
