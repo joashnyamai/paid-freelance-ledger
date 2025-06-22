@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { DollarSign, Clock, CheckCircle, AlertTriangle, TrendingUp, Calendar } from "lucide-react";
+import { DollarSign, Clock, CheckCircle, AlertTriangle, TrendingUp, Calendar, Receipt } from "lucide-react";
 import { Invoice } from "@/pages/Index";
 
 interface DashboardOverviewProps {
@@ -19,6 +19,11 @@ export const DashboardOverview = ({ invoices }: DashboardOverviewProps) => {
   const pendingCount = invoices.filter(inv => inv.status === 'pending').length;
   const partialCount = invoices.filter(inv => inv.status === 'partially_paid').length;
   const overdueCount = invoices.filter(inv => inv.status === 'overdue').length;
+
+  // Calculate totals
+  const totalInvoiceAmount = invoices.reduce((sum, inv) => sum + inv.total, 0);
+  const totalAmountPaid = invoices.reduce((sum, inv) => sum + (inv.amountPaid || 0), 0);
+  const totalOutstanding = totalInvoiceAmount - totalAmountPaid;
 
   const recentInvoices = invoices
     .sort((a, b) => new Date(b.issueDate).getTime() - new Date(a.issueDate).getTime())
@@ -45,6 +50,33 @@ export const DashboardOverview = ({ invoices }: DashboardOverviewProps) => {
         <h2 className="text-3xl font-bold text-gray-900 mb-2">Dashboard</h2>
         <p className="text-gray-600">Welcome back! Here's your business overview.</p>
       </div>
+
+      {/* Totals Summary Card */}
+      <Card className="bg-gradient-to-br from-indigo-50 to-indigo-100 border-indigo-200">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-indigo-800">
+            <Receipt className="h-5 w-5" />
+            Financial Summary
+          </CardTitle>
+          <CardDescription className="text-indigo-600">Overall business financial overview</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-indigo-700">KSH {totalInvoiceAmount.toFixed(2)}</div>
+              <p className="text-sm text-indigo-600">Total Invoiced</p>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-green-700">KSH {totalAmountPaid.toFixed(2)}</div>
+              <p className="text-sm text-green-600">Total Collected</p>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-orange-700">KSH {totalOutstanding.toFixed(2)}</div>
+              <p className="text-sm text-orange-600">Total Outstanding</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">

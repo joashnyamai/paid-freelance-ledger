@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { InvoiceForm } from "@/components/InvoiceForm";
 import { InvoiceList } from "@/components/InvoiceList";
+import { InvoiceFilter, FilterState } from "@/components/InvoiceFilter";
 import { ClientList } from "@/components/ClientList";
 import { InvoicePreview } from "@/components/InvoicePreview";
 import { Sidebar } from "@/components/Sidebar";
@@ -55,6 +56,11 @@ const Index = () => {
   const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
   const [editingInvoice, setEditingInvoice] = useState<Invoice | null>(null);
   const [loading, setLoading] = useState(true);
+  const [filters, setFilters] = useState<FilterState>({
+    status: "all",
+    clientName: "",
+    dateRange: "all"
+  });
 
   // Load data from Supabase on component mount
   useEffect(() => {
@@ -81,6 +87,52 @@ const Index = () => {
 
     loadData();
   }, []);
+
+  const filteredInvoices = useMemo(() => {
+    return invoices.filter(invoice => {
+      // Status filter
+      if (filters.status !== "all" && invoice.status !== filters.status) {
+        return false;
+      }
+
+      // Client name filter
+      if (filters.clientName && !invoice.clientName.toLowerCase().includes(filters.clientName.toLowerCase())) {
+        return false;
+      }
+
+      // Date range filter
+      if (filters.dateRange !== "all") {
+        const invoiceDate = new Date(invoice.issueDate);
+        const now = new Date();
+        const currentMonth = now.getMonth();
+        const currentYear = now.getFullYear();
+
+        switch (filters.dateRange) {
+          case "this_month":
+            if (invoiceDate.getMonth() !== currentMonth || invoiceDate.getFullYear() !== currentYear) {
+              return false;
+            }
+            break;
+          case "last_month":
+            const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+            const lastMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+            if (invoiceDate.getMonth() !== lastMonth || invoiceDate.getFullYear() !== lastMonthYear) {
+              return false;
+            }
+            break;
+          case "last_3_months":
+            const threeMonthsAgo = new Date();
+            threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
+            if (invoiceDate < threeMonthsAgo) {
+              return false;
+            }
+            break;
+        }
+      }
+
+      return true;
+    });
+  }, [invoices, filters]);
 
   const handleCreateInvoice = async (invoiceData: Omit<Invoice, 'id' | 'invoiceNumber'>) => {
     try {
@@ -240,10 +292,13 @@ const Index = () => {
                 New Invoice
               </Button>
             </div>
+            
+            <InvoiceFilter onFilterChange={setFilters} />
+            
             <Card className="bg-white shadow-sm border-0">
               <CardContent className="p-6">
                 <InvoiceList 
-                  invoices={invoices}
+                  invoices={filteredInvoices}
                   onEditInvoice={handleEditInvoice}
                   onViewInvoice={handleViewInvoice}
                   onUpdateStatus={handleUpdateInvoiceStatus}
