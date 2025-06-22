@@ -2,14 +2,17 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { DollarSign, Clock, CheckCircle, AlertTriangle, TrendingUp, Calendar, Receipt } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { DollarSign, Clock, CheckCircle, AlertTriangle, TrendingUp, Calendar, Receipt, Plus, Users, FileText, Settings, AlertCircle } from "lucide-react";
 import { Invoice } from "@/pages/Index";
 
 interface DashboardOverviewProps {
   invoices: Invoice[];
+  onNewInvoice: () => void;
+  onNavigate: (tab: string) => void;
 }
 
-export const DashboardOverview = ({ invoices }: DashboardOverviewProps) => {
+export const DashboardOverview = ({ invoices, onNewInvoice, onNavigate }: DashboardOverviewProps) => {
   const totalRevenue = invoices.filter(inv => inv.status === 'paid').reduce((sum, inv) => sum + inv.total, 0);
   const pendingRevenue = invoices.filter(inv => inv.status === 'pending').reduce((sum, inv) => sum + inv.total, 0);
   const partialRevenue = invoices.filter(inv => inv.status === 'partially_paid').reduce((sum, inv) => sum + (inv.amountPaid || 0), 0);
@@ -44,10 +47,84 @@ export const DashboardOverview = ({ invoices }: DashboardOverviewProps) => {
     }
   };
 
+  // Dynamic quick actions based on current state
+  const getQuickActions = () => {
+    const actions = [];
+
+    // Always show create invoice
+    actions.push({
+      title: "Create New Invoice",
+      description: "Generate a new invoice for your clients",
+      icon: Plus,
+      action: onNewInvoice,
+      variant: "primary" as const
+    });
+
+    // Show manage clients if no invoices or few clients
+    if (invoices.length < 3) {
+      actions.push({
+        title: "Add Clients",
+        description: "Build your client database",
+        icon: Users,
+        action: () => onNavigate('clients'),
+        variant: "secondary" as const
+      });
+    }
+
+    // Show overdue actions if there are overdue invoices
+    if (overdueCount > 0) {
+      actions.push({
+        title: "Review Overdue Invoices",
+        description: `${overdueCount} invoice${overdueCount > 1 ? 's' : ''} need attention`,
+        icon: AlertCircle,
+        action: () => onNavigate('invoices'),
+        variant: "destructive" as const
+      });
+    }
+
+    // Show pending payments if there are pending invoices
+    if (pendingCount > 0) {
+      actions.push({
+        title: "Follow Up Payments",
+        description: `${pendingCount} pending payment${pendingCount > 1 ? 's' : ''}`,
+        icon: Clock,
+        action: () => onNavigate('invoices'),
+        variant: "secondary" as const
+      });
+    }
+
+    // Show settings if no business profile is set up
+    const hasProfile = localStorage.getItem('invoiceApp_profile');
+    if (!hasProfile || !JSON.parse(hasProfile || '{}').businessName) {
+      actions.push({
+        title: "Complete Business Profile",
+        description: "Set up your business information",
+        icon: Settings,
+        action: () => onNavigate('settings'),
+        variant: "outline" as const
+      });
+    }
+
+    // Show analytics if there are enough invoices
+    if (invoices.length >= 5) {
+      actions.push({
+        title: "View Invoice Reports",
+        description: "Analyze your billing performance",
+        icon: TrendingUp,
+        action: () => onNavigate('invoices'),
+        variant: "secondary" as const
+      });
+    }
+
+    return actions.slice(0, 4); // Limit to 4 actions
+  };
+
+  const quickActions = getQuickActions();
+
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-3xl font-bold text-gray-900 mb-2">Dashboard</h2>
+        <h2 className="text-3xl font-bold text-gray-900">Dashboard</h2>
         <p className="text-gray-600">Welcome back! Here's your business overview.</p>
       </div>
 
@@ -148,7 +225,13 @@ export const DashboardOverview = ({ invoices }: DashboardOverviewProps) => {
           </CardHeader>
           <CardContent>
             {recentInvoices.length === 0 ? (
-              <p className="text-gray-500 text-center py-4">No invoices yet</p>
+              <div className="text-center py-8">
+                <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <p className="text-gray-500 mb-4">No invoices yet</p>
+                <Button onClick={onNewInvoice} className="bg-blue-600 hover:bg-blue-700">
+                  Create Your First Invoice
+                </Button>
+              </div>
             ) : (
               <div className="space-y-3">
                 {recentInvoices.map((invoice) => (
@@ -177,18 +260,31 @@ export const DashboardOverview = ({ invoices }: DashboardOverviewProps) => {
               <CheckCircle className="h-5 w-5" />
               Quick Actions
             </CardTitle>
-            <CardDescription>Common tasks and shortcuts</CardDescription>
+            <CardDescription>Smart suggestions based on your current needs</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              <div className="p-4 border-2 border-dashed border-gray-200 rounded-lg text-center">
-                <p className="text-sm text-gray-600 mb-2">Need to create an invoice?</p>
-                <p className="text-xs text-gray-500">Click "New Invoice" in the sidebar to get started</p>
-              </div>
-              <div className="p-4 border-2 border-dashed border-gray-200 rounded-lg text-center">
-                <p className="text-sm text-gray-600 mb-2">Add a new client?</p>
-                <p className="text-xs text-gray-500">Go to Clients tab to manage your client list</p>
-              </div>
+              {quickActions.map((action, index) => (
+                <div key={index} className="p-4 border rounded-lg hover:bg-gray-50 transition-colors">
+                  <div className="flex items-start gap-3">
+                    <div className="p-2 bg-blue-100 rounded-md">
+                      <action.icon className="h-4 w-4 text-blue-600" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-medium text-gray-900 mb-1">{action.title}</p>
+                      <p className="text-sm text-gray-600 mb-3">{action.description}</p>
+                      <Button 
+                        size="sm" 
+                        variant={action.variant}
+                        onClick={action.action}
+                        className="w-full"
+                      >
+                        {action.title.split(' ')[0]} Now
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </CardContent>
         </Card>

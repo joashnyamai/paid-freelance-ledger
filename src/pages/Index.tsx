@@ -288,7 +288,13 @@ const Index = () => {
   const renderContent = () => {
     switch (activeTab) {
       case 'dashboard':
-        return <DashboardOverview invoices={invoices} />;
+        return (
+          <DashboardOverview 
+            invoices={invoices} 
+            onNewInvoice={handleNewInvoice}
+            onNavigate={setActiveTab}
+          />
+        );
       
       case 'invoices':
         return (
