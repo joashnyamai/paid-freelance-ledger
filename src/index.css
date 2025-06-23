@@ -130,10 +130,14 @@
   }
 
   .status-pending {
-    @apply bg-amber-50 text-amber-800 border-amber-200;
+    @apply bg-slate-50 text-slate-800 border-slate-200;
   }
 
   .status-overdue {
     @apply bg-red-50 text-red-800 border-red-200;
+  }
+
+  .status-partially-paid {
+    @apply bg-blue-50 text-blue-800 border-blue-200;
   }
 }

@@ -20,7 +20,7 @@ export const InvoiceList = ({ invoices, onEditInvoice, onViewInvoice, onUpdateSt
       case 'paid':
         return 'bg-emerald-50 text-emerald-800 border-emerald-200 font-semibold';
       case 'pending':
-        return 'bg-amber-50 text-amber-800 border-amber-200 font-semibold';
+        return 'bg-slate-50 text-slate-800 border-slate-200 font-semibold';
       case 'partially_paid':
         return 'bg-blue-50 text-blue-800 border-blue-200 font-semibold';
       case 'overdue':
@@ -159,4 +159,12 @@ export const InvoiceList = ({ invoices, onEditInvoice, onViewInvoice, onUpdateSt
       </Table>
     </div>
   );
+};
+
+const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  });
 };
