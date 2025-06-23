@@ -298,24 +298,31 @@ const Index = () => {
       
       case 'invoices':
         return (
-          <div className="space-y-6">
+          <div className="space-y-8">
             <div className="flex justify-between items-center">
               <div>
-                <h2 className="text-3xl font-bold text-gray-900">Invoices</h2>
-                <p className="text-gray-600">Manage your invoices and track payments</p>
+                <h1 className="text-4xl font-bold text-slate-900 mb-2">Invoice Management</h1>
+                <p className="text-lg text-slate-600">Create, manage, and track your professional invoices</p>
               </div>
               <Button 
                 onClick={handleNewInvoice}
-                className="bg-blue-600 hover:bg-blue-700"
+                className="bg-slate-900 hover:bg-slate-800 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+                size="lg"
               >
-                New Invoice
+                Create New Invoice
               </Button>
             </div>
             
             <InvoiceFilter onFilterChange={setFilters} />
             
-            <Card className="bg-white shadow-sm border-0">
-              <CardContent className="p-6">
+            <Card className="bg-white shadow-lg border-slate-200">
+              <CardHeader className="bg-slate-50 border-b border-slate-200">
+                <CardTitle className="text-xl font-semibold text-slate-900">All Invoices</CardTitle>
+                <CardDescription className="text-slate-600">
+                  Manage and track all your business invoices
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="p-0">
                 <InvoiceList 
                   invoices={filteredInvoices}
                   onEditInvoice={handleEditInvoice}
@@ -330,10 +337,10 @@ const Index = () => {
       
       case 'clients':
         return (
-          <div className="space-y-6">
+          <div className="space-y-8">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900">Clients</h2>
-              <p className="text-gray-600">Manage your client information</p>
+              <h1 className="text-4xl font-bold text-slate-900 mb-2">Client Management</h1>
+              <p className="text-lg text-slate-600">Manage your client relationships and information</p>
             </div>
             <ClientList clients={clients} onAddClient={handleAddClient} />
           </div>
@@ -341,24 +348,24 @@ const Index = () => {
       
       case 'settings':
         return (
-          <div className="space-y-6">
+          <div className="space-y-8">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900">Settings</h2>
-              <p className="text-gray-600">Configure your invoice portal</p>
+              <h1 className="text-4xl font-bold text-slate-900 mb-2">System Settings</h1>
+              <p className="text-lg text-slate-600">Configure your invoice portal preferences and business information</p>
             </div>
             <Tabs defaultValue="profile" className="w-full">
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="profile">Business Profile</TabsTrigger>
-                <TabsTrigger value="invoice">Invoice Settings</TabsTrigger>
-                <TabsTrigger value="preferences">Preferences</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-3 bg-slate-100 p-1">
+                <TabsTrigger value="profile" className="data-[state=active]:bg-white data-[state=active]:shadow-sm font-semibold">Business Profile</TabsTrigger>
+                <TabsTrigger value="invoice" className="data-[state=active]:bg-white data-[state=active]:shadow-sm font-semibold">Invoice Settings</TabsTrigger>
+                <TabsTrigger value="preferences" className="data-[state=active]:bg-white data-[state=active]:shadow-sm font-semibold">Preferences</TabsTrigger>
               </TabsList>
-              <TabsContent value="profile" className="mt-6">
+              <TabsContent value="profile" className="mt-8">
                 <SettingsProfile />
               </TabsContent>
-              <TabsContent value="invoice" className="mt-6">
+              <TabsContent value="invoice" className="mt-8">
                 <SettingsInvoice />
               </TabsContent>
-              <TabsContent value="preferences" className="mt-6">
+              <TabsContent value="preferences" className="mt-8">
                 <SettingsPreferences />
               </TabsContent>
             </Tabs>
@@ -378,10 +385,11 @@ const Index = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading your invoice portal...</p>
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-slate-200 border-t-slate-900 mx-auto mb-6"></div>
+          <h2 className="text-xl font-semibold text-slate-900 mb-2">Loading Invoice Portal</h2>
+          <p className="text-slate-600">Please wait while we prepare your professional dashboard...</p>
         </div>
       </div>
     );
@@ -389,7 +397,7 @@ const Index = () => {
 
   return (
     <div className={`min-h-screen ${preferences.compactMode ? 'text-sm' : ''} ${
-      preferences.darkMode ? 'dark bg-gray-900' : 'bg-gradient-to-br from-gray-50 to-gray-100'
+      preferences.darkMode ? 'dark bg-gray-900' : 'bg-slate-50'
     }`}>
       {/* Navbar */}
       <Navbar 
@@ -403,7 +411,7 @@ const Index = () => {
       />
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12">
         {renderContent()}
       </div>
 

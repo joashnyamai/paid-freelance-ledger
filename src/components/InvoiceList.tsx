@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -17,15 +18,15 @@ export const InvoiceList = ({ invoices, onEditInvoice, onViewInvoice, onUpdateSt
   const getStatusColor = (status: Invoice['status']) => {
     switch (status) {
       case 'paid':
-        return 'bg-green-100 text-green-800 border-green-200';
+        return 'bg-emerald-50 text-emerald-800 border-emerald-200 font-semibold';
       case 'pending':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+        return 'bg-amber-50 text-amber-800 border-amber-200 font-semibold';
       case 'partially_paid':
-        return 'bg-blue-100 text-blue-800 border-blue-200';
+        return 'bg-blue-50 text-blue-800 border-blue-200 font-semibold';
       case 'overdue':
-        return 'bg-red-100 text-red-800 border-red-200';
+        return 'bg-red-50 text-red-800 border-red-200 font-semibold';
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
+        return 'bg-slate-50 text-slate-800 border-slate-200 font-semibold';
     }
   };
 
@@ -45,93 +46,99 @@ export const InvoiceList = ({ invoices, onEditInvoice, onViewInvoice, onUpdateSt
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString();
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
   };
 
   if (invoices.length === 0) {
     return (
-      <div className="text-center py-12">
-        <div className="text-gray-400 mb-4">
-          <FileText className="h-12 w-12 mx-auto" />
+      <div className="text-center py-16 bg-slate-50 rounded-xl border border-slate-200">
+        <div className="text-slate-400 mb-4">
+          <div className="bg-slate-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
+            <FileText className="h-8 w-8" />
+          </div>
         </div>
-        <h3 className="text-lg font-medium text-gray-900 mb-2">No invoices yet</h3>
-        <p className="text-gray-500">Create your first invoice to get started</p>
+        <h3 className="text-xl font-semibold text-slate-900 mb-2">No invoices created yet</h3>
+        <p className="text-slate-600">Create your first professional invoice to get started</p>
       </div>
     );
   }
 
   return (
-    <div className="rounded-md border">
+    <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
       <Table>
         <TableHeader>
-          <TableRow>
-            <TableHead>Invoice #</TableHead>
-            <TableHead>Client</TableHead>
-            <TableHead>Issue Date</TableHead>
-            <TableHead>Due Date</TableHead>
-            <TableHead>Total</TableHead>
-            <TableHead>Paid</TableHead>
-            <TableHead>Balance</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+          <TableRow className="bg-slate-50 border-slate-200">
+            <TableHead className="font-semibold text-slate-900">Invoice Number</TableHead>
+            <TableHead className="font-semibold text-slate-900">Client Information</TableHead>
+            <TableHead className="font-semibold text-slate-900">Issue Date</TableHead>
+            <TableHead className="font-semibold text-slate-900">Due Date</TableHead>
+            <TableHead className="font-semibold text-slate-900">Total Amount</TableHead>
+            <TableHead className="font-semibold text-slate-900">Amount Paid</TableHead>
+            <TableHead className="font-semibold text-slate-900">Balance Due</TableHead>
+            <TableHead className="font-semibold text-slate-900">Status</TableHead>
+            <TableHead className="text-right font-semibold text-slate-900">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {invoices.map((invoice) => (
-            <TableRow key={invoice.id} className="hover:bg-gray-50">
-              <TableCell className="font-medium">{invoice.invoiceNumber}</TableCell>
+            <TableRow key={invoice.id} className="hover:bg-slate-50 border-slate-200">
+              <TableCell className="font-semibold text-slate-900">{invoice.invoiceNumber}</TableCell>
               <TableCell>
                 <div>
-                  <div className="font-medium">{invoice.clientName}</div>
-                  <div className="text-sm text-gray-500">{invoice.clientEmail}</div>
+                  <div className="font-semibold text-slate-900">{invoice.clientName}</div>
+                  <div className="text-sm text-slate-600">{invoice.clientEmail}</div>
                 </div>
               </TableCell>
-              <TableCell>{formatDate(invoice.issueDate)}</TableCell>
-              <TableCell>{formatDate(invoice.dueDate)}</TableCell>
-              <TableCell className="font-medium">KSH {invoice.total.toFixed(2)}</TableCell>
-              <TableCell className="font-medium text-green-600">
-                KSH {(invoice.amountPaid || 0).toFixed(2)}
+              <TableCell className="text-slate-700">{formatDate(invoice.issueDate)}</TableCell>
+              <TableCell className="text-slate-700">{formatDate(invoice.dueDate)}</TableCell>
+              <TableCell className="font-semibold text-slate-900">KSH {invoice.total.toLocaleString()}</TableCell>
+              <TableCell className="font-semibold text-emerald-700">
+                KSH {(invoice.amountPaid || 0).toLocaleString()}
               </TableCell>
-              <TableCell className="font-medium text-red-600">
-                KSH {(invoice.balance || invoice.total).toFixed(2)}
+              <TableCell className="font-semibold text-red-700">
+                KSH {(invoice.balance || invoice.total).toLocaleString()}
               </TableCell>
               <TableCell>
-                <Badge className={`${getStatusColor(invoice.status)} flex items-center gap-1 w-fit`}>
+                <Badge className={`${getStatusColor(invoice.status)} flex items-center gap-1 w-fit border`}>
                   {getStatusIcon(invoice.status)}
-                  {invoice.status === 'partially_paid' ? 'Partial' : 
+                  {invoice.status === 'partially_paid' ? 'Partial Payment' : 
                    invoice.status.charAt(0).toUpperCase() + invoice.status.slice(1)}
                 </Badge>
               </TableCell>
               <TableCell className="text-right">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="h-8 w-8 p-0">
+                    <Button variant="ghost" className="h-8 w-8 p-0 hover:bg-slate-100">
                       <MoreHorizontal className="h-4 w-4" />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => onViewInvoice(invoice)}>
+                  <DropdownMenuContent align="end" className="bg-white border-slate-200 shadow-xl">
+                    <DropdownMenuItem onClick={() => onViewInvoice(invoice)} className="hover:bg-slate-50">
                       <Eye className="mr-2 h-4 w-4" />
                       View & Add Payment
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => onEditInvoice(invoice)}>
+                    <DropdownMenuItem onClick={() => onEditInvoice(invoice)} className="hover:bg-slate-50">
                       <Edit className="mr-2 h-4 w-4" />
-                      Edit
+                      Edit Invoice
                     </DropdownMenuItem>
                     {invoice.status !== 'paid' && (
-                      <DropdownMenuItem onClick={() => onUpdateStatus(invoice.id, 'paid')}>
+                      <DropdownMenuItem onClick={() => onUpdateStatus(invoice.id, 'paid')} className="hover:bg-slate-50">
                         <CheckCircle className="mr-2 h-4 w-4" />
                         Mark as Paid
                       </DropdownMenuItem>
                     )}
                     {invoice.status !== 'pending' && (
-                      <DropdownMenuItem onClick={() => onUpdateStatus(invoice.id, 'pending')}>
+                      <DropdownMenuItem onClick={() => onUpdateStatus(invoice.id, 'pending')} className="hover:bg-slate-50">
                         <Clock className="mr-2 h-4 w-4" />
                         Mark as Pending
                       </DropdownMenuItem>
                     )}
                     {invoice.status !== 'overdue' && (
-                      <DropdownMenuItem onClick={() => onUpdateStatus(invoice.id, 'overdue')}>
+                      <DropdownMenuItem onClick={() => onUpdateStatus(invoice.id, 'overdue')} className="hover:bg-slate-50">
                         <AlertCircle className="mr-2 h-4 w-4" />
                         Mark as Overdue
                       </DropdownMenuItem>
