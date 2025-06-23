@@ -7,7 +7,7 @@ import { InvoiceList } from "@/components/InvoiceList";
 import { InvoiceFilter, FilterState } from "@/components/InvoiceFilter";
 import { ClientList } from "@/components/ClientList";
 import { InvoicePreview } from "@/components/InvoicePreview";
-import { Sidebar } from "@/components/Sidebar";
+import { Navbar } from "@/components/Navbar";
 import { DashboardOverview } from "@/components/DashboardOverview";
 import { SettingsProfile } from "@/components/SettingsProfile";
 import { SettingsInvoice } from "@/components/SettingsInvoice";
@@ -390,28 +390,22 @@ const Index = () => {
   return (
     <div className={`min-h-screen ${preferences.compactMode ? 'text-sm' : ''} ${
       preferences.darkMode ? 'dark bg-gray-900' : 'bg-gradient-to-br from-gray-50 to-gray-100'
-    } flex`}>
-      {/* Sidebar */}
-      <Sidebar 
+    }`}>
+      {/* Navbar */}
+      <Navbar 
         activeTab={activeTab}
         onTabChange={setActiveTab}
         onNewInvoice={handleNewInvoice}
         invoiceCount={invoices.length}
         clientCount={clients.length}
+        businessName={profile.businessName}
+        ownerName={profile.ownerName}
       />
 
       {/* Main Content */}
-      <div className="flex-1 p-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {renderContent()}
       </div>
-
-      {/* Show business info in header if configured */}
-      {profile.businessName && (
-        <div className="fixed top-4 right-4 bg-white dark:bg-gray-800 rounded-lg shadow-md p-3 text-sm">
-          <div className="font-semibold">{profile.businessName}</div>
-          {profile.ownerName && <div className="text-gray-600 dark:text-gray-400">{profile.ownerName}</div>}
-        </div>
-      )}
 
       {/* Invoice Form Modal */}
       {showInvoiceForm && (
