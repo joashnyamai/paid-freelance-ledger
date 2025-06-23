@@ -366,7 +366,13 @@ const Index = () => {
         );
       
       default:
-        return <DashboardOverview invoices={invoices} />;
+        return (
+          <DashboardOverview 
+            invoices={invoices} 
+            onNewInvoice={handleNewInvoice}
+            onNavigate={setActiveTab}
+          />
+        );
     }
   };
 
