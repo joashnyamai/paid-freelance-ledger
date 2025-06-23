@@ -34,11 +34,11 @@ export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePrevie
               margin: 0; 
               padding: 40px; 
               background: #ffffff;
-              color: #1e293b;
+              color: #000000;
               line-height: 1.6;
             }
             .header { 
-              border-bottom: 3px solid #1e293b; 
+              border-bottom: 3px solid #000000; 
               padding-bottom: 30px; 
               margin-bottom: 40px; 
               display: flex;
@@ -51,16 +51,16 @@ export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePrevie
             .company-name { 
               font-size: 28px; 
               font-weight: 700; 
-              color: #1e293b; 
+              color: #000000; 
               margin: 0 0 8px 0; 
             }
             .company-address {
-              color: #64748b;
+              color: #666666;
               font-size: 14px;
               line-height: 1.5;
             }
             .invoice-title { 
-              color: #1e293b; 
+              color: #000000; 
               font-size: 36px; 
               font-weight: 700; 
               margin: 0; 
@@ -68,7 +68,7 @@ export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePrevie
             }
             .invoice-number { 
               font-size: 16px; 
-              color: #64748b; 
+              color: #666666; 
               margin: 5px 0; 
               text-align: right;
             }
@@ -84,20 +84,20 @@ export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePrevie
               font-size: 16px; 
               font-weight: 600; 
               margin-bottom: 15px; 
-              color: #1e293b; 
+              color: #000000; 
               text-transform: uppercase;
               letter-spacing: 0.5px;
             }
             .client-info { 
-              background: #f8fafc; 
+              background: #f8f8f8; 
               padding: 20px; 
-              border-left: 4px solid #1e293b;
+              border-left: 4px solid #000000;
               border-radius: 0 8px 8px 0;
             }
             .client-name {
               font-weight: 600;
               font-size: 16px;
-              color: #1e293b;
+              color: #000000;
               margin-bottom: 4px;
             }
             table { 
@@ -109,10 +109,10 @@ export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePrevie
             th, td { 
               padding: 16px; 
               text-align: left; 
-              border-bottom: 1px solid #e2e8f0; 
+              border-bottom: 1px solid #e0e0e0; 
             }
             th { 
-              background: #1e293b; 
+              background: #000000; 
               font-weight: 600; 
               color: white;
               text-transform: uppercase;
@@ -120,7 +120,7 @@ export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePrevie
               letter-spacing: 0.5px;
             }
             tr:nth-child(even) {
-              background: #f8fafc;
+              background: #f8f8f8;
             }
             .amount { 
               text-align: right; 
@@ -133,10 +133,10 @@ export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePrevie
             }
             .totals-container {
               width: 350px;
-              background: #f8fafc;
+              background: #f8f8f8;
               padding: 25px;
               border-radius: 8px;
-              border: 1px solid #e2e8f0;
+              border: 1px solid #e0e0e0;
             }
             .total-row { 
               display: flex; 
@@ -147,10 +147,10 @@ export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePrevie
             .total-final { 
               font-size: 20px; 
               font-weight: 700; 
-              border-top: 2px solid #1e293b; 
+              border-top: 2px solid #000000; 
               padding-top: 15px; 
               margin-top: 15px;
-              color: #1e293b;
+              color: #000000;
             }
             .status { 
               padding: 8px 16px; 
@@ -168,9 +168,9 @@ export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePrevie
               border: 1px solid #bbf7d0;
             }
             .status-pending { 
-              background: #e0f2fe; 
-              color: #0c4a6e; 
-              border: 1px solid #bae6fd;
+              background: #f8f8f8; 
+              color: #000000; 
+              border: 1px solid #e0e0e0;
             }
             .status-overdue { 
               background: #fee2e2; 
@@ -183,18 +183,18 @@ export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePrevie
               border: 1px solid #93c5fd;
             }
             .payment-terms {
-              background: #f1f5f9;
+              background: #f4f4f4;
               padding: 20px;
               border-radius: 8px;
               margin-top: 30px;
-              border-left: 4px solid #64748b;
+              border-left: 4px solid #666666;
             }
             .footer {
               margin-top: 50px;
               text-align: center;
-              color: #64748b;
+              color: #666666;
               font-size: 12px;
-              border-top: 1px solid #e2e8f0;
+              border-top: 1px solid #e0e0e0;
               padding-top: 20px;
             }
           </style>
@@ -311,9 +311,9 @@ export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePrevie
       <div className="bg-white rounded-lg shadow-xl w-full max-w-5xl max-h-[90vh] overflow-y-auto">
         <div className="p-6">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-slate-900">Invoice Preview</h2>
+            <h2 className="text-2xl font-bold text-black">Invoice Preview</h2>
             <div className="flex space-x-2">
-              <Button onClick={handleDownload} className="bg-slate-900 hover:bg-slate-800">
+              <Button onClick={handleDownload} className="bg-black hover:bg-gray-800">
                 <Download className="h-4 w-4 mr-2" />
                 Download/Print
               </Button>
@@ -326,11 +326,11 @@ export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePrevie
           {/* Professional Invoice Preview */}
           <div className="bg-white border rounded-lg shadow-sm overflow-hidden" id="invoice-content">
             {/* Header with Company Info */}
-            <div className="border-b-3 border-slate-900 p-8 bg-slate-50">
+            <div className="border-b-3 border-black p-8 bg-gray-50">
               <div className="flex justify-between items-start">
                 <div className="flex-1">
-                  <h1 className="text-2xl font-bold text-slate-900 mb-2">Professional Services Ltd.</h1>
-                  <div className="text-slate-600 text-sm leading-relaxed">
+                  <h1 className="text-2xl font-bold text-black mb-2">Professional Services Ltd.</h1>
+                  <div className="text-gray-600 text-sm leading-relaxed">
                     123 Business Avenue<br />
                     Nairobi, Kenya 00100<br />
                     Phone: +254 700 123 456<br />
@@ -339,11 +339,11 @@ export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePrevie
                   </div>
                 </div>
                 <div className="text-right">
-                  <h2 className="text-4xl font-bold text-slate-900 mb-2">INVOICE</h2>
-                  <div className="text-lg text-slate-600 mb-3">#{invoice.invoiceNumber}</div>
+                  <h2 className="text-4xl font-bold text-black mb-2">INVOICE</h2>
+                  <div className="text-lg text-gray-600 mb-3">#{invoice.invoiceNumber}</div>
                   <span className={`px-4 py-2 rounded-lg text-sm font-semibold border ${
-                    invoice.status === 'paid' ? 'bg-emerald-50 text-emerald-800 border-emerald-200' :
-                    invoice.status === 'pending' ? 'bg-slate-50 text-slate-800 border-slate-200' :
+                    invoice.status === 'paid' ? 'bg-green-50 text-green-800 border-green-200' :
+                    invoice.status === 'pending' ? 'bg-gray-50 text-black border-gray-200' :
                     invoice.status === 'partially_paid' ? 'bg-blue-50 text-blue-800 border-blue-200' :
                     'bg-red-50 text-red-800 border-red-200'
                   }`}>
@@ -358,29 +358,29 @@ export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePrevie
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                 {/* Bill To */}
                 <div>
-                  <h3 className="font-semibold text-slate-900 mb-4 uppercase tracking-wide text-sm">Bill To</h3>
-                  <div className="bg-slate-50 p-6 rounded-lg border-l-4 border-slate-900">
-                    <div className="font-semibold text-slate-900 text-lg mb-1">{invoice.clientName}</div>
-                    <div className="text-slate-600 mb-1">{invoice.clientEmail}</div>
-                    <div className="text-slate-600 whitespace-pre-line">{invoice.clientAddress}</div>
+                  <h3 className="font-semibold text-black mb-4 uppercase tracking-wide text-sm">Bill To</h3>
+                  <div className="bg-gray-50 p-6 rounded-lg border-l-4 border-black">
+                    <div className="font-semibold text-black text-lg mb-1">{invoice.clientName}</div>
+                    <div className="text-gray-600 mb-1">{invoice.clientEmail}</div>
+                    <div className="text-gray-600 whitespace-pre-line">{invoice.clientAddress}</div>
                   </div>
                 </div>
 
                 {/* Invoice Details */}
                 <div>
-                  <h3 className="font-semibold text-slate-900 mb-4 uppercase tracking-wide text-sm">Invoice Details</h3>
+                  <h3 className="font-semibold text-black mb-4 uppercase tracking-wide text-sm">Invoice Details</h3>
                   <div className="space-y-3">
                     <div className="flex justify-between">
-                      <span className="text-slate-600">Issue Date:</span>
-                      <span className="font-semibold text-slate-900">{formatDate(invoice.issueDate)}</span>
+                      <span className="text-gray-600">Issue Date:</span>
+                      <span className="font-semibold text-black">{formatDate(invoice.issueDate)}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-slate-600">Due Date:</span>
-                      <span className="font-semibold text-slate-900">{formatDate(invoice.dueDate)}</span>
+                      <span className="text-gray-600">Due Date:</span>
+                      <span className="font-semibold text-black">{formatDate(invoice.dueDate)}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-slate-600">Payment Terms:</span>
-                      <span className="font-semibold text-slate-900">Net 30</span>
+                      <span className="text-gray-600">Payment Terms:</span>
+                      <span className="font-semibold text-black">Net 30</span>
                     </div>
                   </div>
                 </div>
@@ -388,10 +388,10 @@ export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePrevie
 
               {/* Items Table */}
               <div className="mb-8">
-                <div className="overflow-hidden rounded-lg border border-slate-200 shadow-sm">
+                <div className="overflow-hidden rounded-lg border border-gray-200 shadow-sm">
                   <table className="w-full">
                     <thead>
-                      <tr className="bg-slate-900 text-white">
+                      <tr className="bg-black text-white">
                         <th className="px-6 py-4 text-left font-semibold uppercase text-sm tracking-wide">Description</th>
                         <th className="px-6 py-4 text-center font-semibold uppercase text-sm tracking-wide">Qty</th>
                         <th className="px-6 py-4 text-right font-semibold uppercase text-sm tracking-wide">Unit Rate</th>
@@ -400,13 +400,13 @@ export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePrevie
                     </thead>
                     <tbody>
                       {invoice.items.map((item, index) => (
-                        <tr key={item.id} className={index % 2 === 0 ? 'bg-white' : 'bg-slate-50'}>
-                          <td className="px-6 py-4 text-slate-900">{item.description}</td>
-                          <td className="px-6 py-4 text-center text-slate-700">{item.quantity}</td>
-                          <td className="px-6 py-4 text-right font-medium text-slate-900">
+                        <tr key={item.id} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                          <td className="px-6 py-4 text-black">{item.description}</td>
+                          <td className="px-6 py-4 text-center text-gray-700">{item.quantity}</td>
+                          <td className="px-6 py-4 text-right font-medium text-black">
                             KSH {item.rate.toLocaleString('en-KE', { minimumFractionDigits: 2 })}
                           </td>
-                          <td className="px-6 py-4 text-right font-semibold text-slate-900">
+                          <td className="px-6 py-4 text-right font-semibold text-black">
                             KSH {item.amount.toLocaleString('en-KE', { minimumFractionDigits: 2 })}
                           </td>
                         </tr>
@@ -418,23 +418,23 @@ export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePrevie
 
               {/* Totals */}
               <div className="flex justify-end mb-8">
-                <div className="w-96 bg-slate-50 p-6 rounded-lg border border-slate-200">
+                <div className="w-96 bg-gray-50 p-6 rounded-lg border border-gray-200">
                   <div className="space-y-3">
-                    <div className="flex justify-between text-slate-700">
+                    <div className="flex justify-between text-gray-700">
                       <span>Subtotal:</span>
                       <span className="font-medium">KSH {invoice.subtotal.toLocaleString('en-KE', { minimumFractionDigits: 2 })}</span>
                     </div>
-                    <div className="flex justify-between text-slate-700">
+                    <div className="flex justify-between text-gray-700">
                       <span>VAT (16%):</span>
                       <span className="font-medium">KSH {invoice.tax.toLocaleString('en-KE', { minimumFractionDigits: 2 })}</span>
                     </div>
-                    <div className="border-t-2 border-slate-900 pt-3">
-                      <div className="flex justify-between text-xl font-bold text-slate-900">
+                    <div className="border-t-2 border-black pt-3">
+                      <div className="flex justify-between text-xl font-bold text-black">
                         <span>Total Amount:</span>
                         <span>KSH {invoice.total.toLocaleString('en-KE', { minimumFractionDigits: 2 })}</span>
                       </div>
                     </div>
-                    <div className="flex justify-between text-emerald-700 font-semibold">
+                    <div className="flex justify-between text-green-700 font-semibold">
                       <span>Amount Paid:</span>
                       <span>KSH {(invoice.amountPaid || 0).toLocaleString('en-KE', { minimumFractionDigits: 2 })}</span>
                     </div>
@@ -450,15 +450,15 @@ export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePrevie
               <div className="space-y-6">
                 {invoice.notes && (
                   <div>
-                    <h3 className="font-semibold text-slate-900 mb-3 uppercase tracking-wide text-sm">Notes & Terms</h3>
-                    <div className="bg-slate-50 p-4 rounded-lg border-l-4 border-slate-400">
-                      <p className="text-slate-700 whitespace-pre-line">{invoice.notes}</p>
+                    <h3 className="font-semibold text-black mb-3 uppercase tracking-wide text-sm">Notes & Terms</h3>
+                    <div className="bg-gray-50 p-4 rounded-lg border-l-4 border-gray-400">
+                      <p className="text-gray-700 whitespace-pre-line">{invoice.notes}</p>
                     </div>
                   </div>
                 )}
                 
-                <div className="bg-slate-100 p-6 rounded-lg border-l-4 border-slate-600">
-                  <p className="text-slate-700 text-sm leading-relaxed">
+                <div className="bg-gray-100 p-6 rounded-lg border-l-4 border-gray-600">
+                  <p className="text-gray-700 text-sm leading-relaxed">
                     <strong>Payment Terms:</strong> Payment is due within 30 days of invoice date. 
                     Late payments may incur a 1.5% monthly service charge. 
                     Please remit payment to the address above or contact us for electronic payment options.
@@ -467,7 +467,7 @@ export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePrevie
               </div>
 
               {/* Footer */}
-              <div className="mt-8 pt-6 border-t border-slate-200 text-center text-slate-500 text-sm">
+              <div className="mt-8 pt-6 border-t border-gray-200 text-center text-gray-500 text-sm">
                 Thank you for your business! | Professional Services Ltd. | www.professional.co.ke
               </div>
             </div>
