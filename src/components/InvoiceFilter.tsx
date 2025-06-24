@@ -50,7 +50,7 @@ export const InvoiceFilter = ({ onFilterChange }: InvoiceFilterProps) => {
         <Button
           variant="outline"
           onClick={() => setShowFilters(!showFilters)}
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 border-gray-300 hover:bg-gray-50"
         >
           <Filter className="h-4 w-4" />
           Filters
@@ -60,7 +60,7 @@ export const InvoiceFilter = ({ onFilterChange }: InvoiceFilterProps) => {
             variant="ghost"
             size="sm"
             onClick={clearFilters}
-            className="flex items-center gap-2 text-gray-500"
+            className="flex items-center gap-2 text-gray-500 hover:bg-gray-50"
           >
             <X className="h-3 w-3" />
             Clear
@@ -69,19 +69,19 @@ export const InvoiceFilter = ({ onFilterChange }: InvoiceFilterProps) => {
       </div>
 
       {showFilters && (
-        <Card>
+        <Card className="bg-white border-gray-200">
           <CardContent className="p-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium">Status</label>
+                <label className="text-sm font-medium text-black">Status</label>
                 <Select
                   value={filters.status}
                   onValueChange={(value) => handleFilterChange("status", value)}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="border-gray-300">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-white border-gray-200">
                     <SelectItem value="all">All Status</SelectItem>
                     <SelectItem value="paid">Paid</SelectItem>
                     <SelectItem value="pending">Pending</SelectItem>
@@ -92,24 +92,25 @@ export const InvoiceFilter = ({ onFilterChange }: InvoiceFilterProps) => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium">Client Name</label>
+                <label className="text-sm font-medium text-black">Client Name</label>
                 <Input
                   placeholder="Search by client name..."
                   value={filters.clientName}
                   onChange={(e) => handleFilterChange("clientName", e.target.value)}
+                  className="border-gray-300"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium">Date Range</label>
+                <label className="text-sm font-medium text-black">Date Range</label>
                 <Select
                   value={filters.dateRange}
                   onValueChange={(value) => handleFilterChange("dateRange", value)}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="border-gray-300">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-white border-gray-200">
                     <SelectItem value="all">All Time</SelectItem>
                     <SelectItem value="this_month">This Month</SelectItem>
                     <SelectItem value="last_month">Last Month</SelectItem>

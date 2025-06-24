@@ -301,12 +301,12 @@ const Index = () => {
           <div className="space-y-8">
             <div className="flex justify-between items-center">
               <div>
-                <h1 className="text-4xl font-bold text-slate-900 mb-2">Invoice Management</h1>
-                <p className="text-lg text-slate-600">Create, manage, and track your professional invoices</p>
+                <h1 className="text-4xl font-bold text-black mb-2">Invoice Management</h1>
+                <p className="text-lg text-gray-600">Create, manage, and track your professional invoices</p>
               </div>
               <Button 
                 onClick={handleNewInvoice}
-                className="bg-slate-900 hover:bg-slate-800 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
                 size="lg"
               >
                 Create New Invoice
@@ -315,10 +315,10 @@ const Index = () => {
             
             <InvoiceFilter onFilterChange={setFilters} />
             
-            <Card className="bg-white shadow-lg border-slate-200">
-              <CardHeader className="bg-slate-50 border-b border-slate-200">
-                <CardTitle className="text-xl font-semibold text-slate-900">All Invoices</CardTitle>
-                <CardDescription className="text-slate-600">
+            <Card className="bg-white shadow-lg border-gray-200">
+              <CardHeader className="bg-gray-50 border-b border-gray-200">
+                <CardTitle className="text-xl font-semibold text-black">All Invoices</CardTitle>
+                <CardDescription className="text-gray-600">
                   Manage and track all your business invoices
                 </CardDescription>
               </CardHeader>
@@ -339,8 +339,8 @@ const Index = () => {
         return (
           <div className="space-y-8">
             <div>
-              <h1 className="text-4xl font-bold text-slate-900 mb-2">Client Management</h1>
-              <p className="text-lg text-slate-600">Manage your client relationships and information</p>
+              <h1 className="text-4xl font-bold text-black mb-2">Client Management</h1>
+              <p className="text-lg text-gray-600">Manage your client relationships and information</p>
             </div>
             <ClientList clients={clients} onAddClient={handleAddClient} />
           </div>
@@ -350,11 +350,11 @@ const Index = () => {
         return (
           <div className="space-y-8">
             <div>
-              <h1 className="text-4xl font-bold text-slate-900 mb-2">System Settings</h1>
-              <p className="text-lg text-slate-600">Configure your invoice portal preferences and business information</p>
+              <h1 className="text-4xl font-bold text-black mb-2">System Settings</h1>
+              <p className="text-lg text-gray-600">Configure your invoice portal preferences and business information</p>
             </div>
             <Tabs defaultValue="profile" className="w-full">
-              <TabsList className="grid w-full grid-cols-3 bg-slate-100 p-1">
+              <TabsList className="grid w-full grid-cols-3 bg-gray-100 p-1">
                 <TabsTrigger value="profile" className="data-[state=active]:bg-white data-[state=active]:shadow-sm font-semibold">Business Profile</TabsTrigger>
                 <TabsTrigger value="invoice" className="data-[state=active]:bg-white data-[state=active]:shadow-sm font-semibold">Invoice Settings</TabsTrigger>
                 <TabsTrigger value="preferences" className="data-[state=active]:bg-white data-[state=active]:shadow-sm font-semibold">Preferences</TabsTrigger>

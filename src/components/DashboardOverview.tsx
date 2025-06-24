@@ -37,9 +37,9 @@ export const DashboardOverview = ({ invoices, onNewInvoice, onNavigate }: Dashbo
       case 'paid':
         return 'bg-green-100 text-green-800 border-green-200';
       case 'pending':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'partially_paid':
         return 'bg-blue-100 text-blue-800 border-blue-200';
+      case 'partially_paid':
+        return 'bg-purple-100 text-purple-800 border-purple-200';
       case 'overdue':
         return 'bg-red-100 text-red-800 border-red-200';
       default:
@@ -129,27 +129,27 @@ export const DashboardOverview = ({ invoices, onNewInvoice, onNavigate }: Dashbo
       </div>
 
       {/* Totals Summary Card */}
-      <Card className="bg-gradient-to-br from-indigo-50 to-indigo-100 border-indigo-200">
+      <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-indigo-800">
+          <CardTitle className="flex items-center gap-2 text-blue-800">
             <Receipt className="h-5 w-5" />
             Financial Summary
           </CardTitle>
-          <CardDescription className="text-indigo-600">Overall business financial overview</CardDescription>
+          <CardDescription className="text-blue-600">Overall business financial overview</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="text-center">
-              <div className="text-2xl font-bold text-indigo-700">KSH {totalInvoiceAmount.toFixed(2)}</div>
-              <p className="text-sm text-indigo-600">Total Invoiced</p>
+              <div className="text-2xl font-bold text-blue-700">KSH {totalInvoiceAmount.toFixed(2)}</div>
+              <p className="text-sm text-blue-600">Total Invoiced</p>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-green-700">KSH {totalAmountPaid.toFixed(2)}</div>
               <p className="text-sm text-green-600">Total Collected</p>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-orange-700">KSH {totalOutstanding.toFixed(2)}</div>
-              <p className="text-sm text-orange-600">Total Outstanding</p>
+              <div className="text-2xl font-bold text-purple-700">KSH {totalOutstanding.toFixed(2)}</div>
+              <p className="text-sm text-purple-600">Total Outstanding</p>
             </div>
           </div>
         </CardContent>
@@ -168,25 +168,25 @@ export const DashboardOverview = ({ invoices, onNewInvoice, onNavigate }: Dashbo
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-yellow-50 to-yellow-100 border-yellow-200">
+        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-yellow-800">Pending</CardTitle>
-            <Clock className="h-4 w-4 text-yellow-600" />
+            <CardTitle className="text-sm font-medium text-blue-800">Pending</CardTitle>
+            <Clock className="h-4 w-4 text-blue-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-yellow-700">KSH {pendingRevenue.toFixed(2)}</div>
-            <p className="text-xs text-yellow-600">{pendingCount} pending invoices</p>
+            <div className="text-2xl font-bold text-blue-700">KSH {pendingRevenue.toFixed(2)}</div>
+            <p className="text-xs text-blue-600">{pendingCount} pending invoices</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+        <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-blue-800">Partial Payments</CardTitle>
-            <DollarSign className="h-4 w-4 text-blue-600" />
+            <CardTitle className="text-sm font-medium text-purple-800">Partial Payments</CardTitle>
+            <DollarSign className="h-4 w-4 text-purple-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-700">KSH {partialRevenue.toFixed(2)}</div>
-            <p className="text-xs text-blue-600">{partialCount} partially paid</p>
+            <div className="text-2xl font-bold text-purple-700">KSH {partialRevenue.toFixed(2)}</div>
+            <p className="text-xs text-purple-600">{partialCount} partially paid</p>
           </CardContent>
         </Card>
 
@@ -201,23 +201,23 @@ export const DashboardOverview = ({ invoices, onNewInvoice, onNavigate }: Dashbo
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200">
+        <Card className="bg-gradient-to-br from-gray-50 to-gray-100 border-gray-200">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-purple-800">This Month</CardTitle>
-            <TrendingUp className="h-4 w-4 text-purple-600" />
+            <CardTitle className="text-sm font-medium text-gray-800">This Month</CardTitle>
+            <TrendingUp className="h-4 w-4 text-gray-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-purple-700">{invoices.length}</div>
-            <p className="text-xs text-purple-600">Total invoices</p>
+            <div className="text-2xl font-bold text-gray-700">{invoices.length}</div>
+            <p className="text-xs text-gray-600">Total invoices</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Recent Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
+        <Card className="bg-white border-gray-200">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-black">
               <Calendar className="h-5 w-5" />
               Recent Invoices
             </CardTitle>
@@ -235,7 +235,7 @@ export const DashboardOverview = ({ invoices, onNewInvoice, onNavigate }: Dashbo
             ) : (
               <div className="space-y-3">
                 {recentInvoices.map((invoice) => (
-                  <div key={invoice.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div key={invoice.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200">
                     <div>
                       <div className="font-medium text-gray-900">{invoice.invoiceNumber}</div>
                       <div className="text-sm text-gray-600">{invoice.clientName}</div>
@@ -254,9 +254,9 @@ export const DashboardOverview = ({ invoices, onNewInvoice, onNavigate }: Dashbo
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-white border-gray-200">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-black">
               <CheckCircle className="h-5 w-5" />
               Quick Actions
             </CardTitle>
@@ -265,7 +265,7 @@ export const DashboardOverview = ({ invoices, onNewInvoice, onNavigate }: Dashbo
           <CardContent>
             <div className="space-y-3">
               {quickActions.map((action, index) => (
-                <div key={index} className="p-4 border rounded-lg hover:bg-gray-50 transition-colors">
+                <div key={index} className="p-4 border rounded-lg hover:bg-gray-50 transition-colors border-gray-200">
                   <div className="flex items-start gap-3">
                     <div className="p-2 bg-blue-100 rounded-md">
                       <action.icon className="h-4 w-4 text-blue-600" />
