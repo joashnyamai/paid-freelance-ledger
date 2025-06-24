@@ -39,33 +39,34 @@ export const SettingsInvoice = () => {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Invoice Settings</CardTitle>
-        <CardDescription>Customize your invoice defaults and appearance</CardDescription>
+    <Card className="bg-white border-gray-200 shadow-sm">
+      <CardHeader className="bg-white border-b border-gray-200">
+        <CardTitle className="text-black">Invoice Settings</CardTitle>
+        <CardDescription className="text-gray-600">Customize your invoice defaults and appearance</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-4 bg-white p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="defaultTax">Default Tax Rate (%)</Label>
+            <Label htmlFor="defaultTax" className="text-black font-medium">Default Tax Rate (%)</Label>
             <Input
               id="defaultTax"
               type="number"
               value={formData.defaultTax}
               onChange={(e) => handleChange("defaultTax", parseFloat(e.target.value) || 0)}
               placeholder="16"
+              className="border-gray-300 bg-white text-black"
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="currency">Currency</Label>
+            <Label htmlFor="currency" className="text-black font-medium">Currency</Label>
             <Select
               value={formData.currency}
               onValueChange={(value) => handleChange("currency", value)}
             >
-              <SelectTrigger>
+              <SelectTrigger className="border-gray-300 bg-white text-black">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white border-gray-200">
                 <SelectItem value="KSH">KSH (Kenyan Shilling)</SelectItem>
                 <SelectItem value="USD">USD (US Dollar)</SelectItem>
                 <SelectItem value="EUR">EUR (Euro)</SelectItem>
@@ -74,42 +75,46 @@ export const SettingsInvoice = () => {
             </Select>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="paymentTerms">Default Payment Terms (Days)</Label>
+            <Label htmlFor="paymentTerms" className="text-black font-medium">Default Payment Terms (Days)</Label>
             <Input
               id="paymentTerms"
               type="number"
               value={formData.paymentTerms}
               onChange={(e) => handleChange("paymentTerms", parseInt(e.target.value) || 30)}
               placeholder="30"
+              className="border-gray-300 bg-white text-black"
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="invoicePrefix">Invoice Number Prefix</Label>
+            <Label htmlFor="invoicePrefix" className="text-black font-medium">Invoice Number Prefix</Label>
             <Input
               id="invoicePrefix"
               value={formData.invoicePrefix}
               onChange={(e) => handleChange("invoicePrefix", e.target.value)}
               placeholder="INV"
+              className="border-gray-300 bg-white text-black"
             />
           </div>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="logoUrl">Logo URL (Optional)</Label>
+          <Label htmlFor="logoUrl" className="text-black font-medium">Logo URL (Optional)</Label>
           <Input
             id="logoUrl"
             value={formData.logoUrl}
             onChange={(e) => handleChange("logoUrl", e.target.value)}
             placeholder="https://example.com/logo.png"
+            className="border-gray-300 bg-white text-black"
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="defaultNotes">Default Invoice Notes</Label>
+          <Label htmlFor="defaultNotes" className="text-black font-medium">Default Invoice Notes</Label>
           <Textarea
             id="defaultNotes"
             value={formData.defaultNotes}
             onChange={(e) => handleChange("defaultNotes", e.target.value)}
             placeholder="Thank you for your business!"
             rows={3}
+            className="border-gray-300 bg-white text-black"
           />
         </div>
         <div className="flex items-center space-x-2">
@@ -118,9 +123,13 @@ export const SettingsInvoice = () => {
             checked={formData.includeSignature}
             onCheckedChange={(checked) => handleChange("includeSignature", checked)}
           />
-          <Label htmlFor="includeSignature">Include digital signature space on invoices</Label>
+          <Label htmlFor="includeSignature" className="text-black font-medium">Include digital signature space on invoices</Label>
         </div>
-        <Button onClick={handleSave} disabled={isLoading}>
+        <Button 
+          onClick={handleSave} 
+          disabled={isLoading}
+          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold"
+        >
           {isLoading ? "Saving..." : "Save Settings"}
         </Button>
       </CardContent>

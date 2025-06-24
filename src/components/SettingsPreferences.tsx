@@ -75,15 +75,15 @@ export const SettingsPreferences = () => {
 
   return (
     <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Application Preferences</CardTitle>
-          <CardDescription>Customize your invoice portal experience</CardDescription>
+      <Card className="bg-white border-gray-200 shadow-sm">
+        <CardHeader className="bg-white border-b border-gray-200">
+          <CardTitle className="text-black">Application Preferences</CardTitle>
+          <CardDescription className="text-gray-600">Customize your invoice portal experience</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-4 bg-white p-6">
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label>Dark Mode</Label>
+              <Label className="text-black font-medium">Dark Mode</Label>
               <p className="text-sm text-gray-500">Enable dark theme for the application</p>
             </div>
             <Switch
@@ -94,7 +94,7 @@ export const SettingsPreferences = () => {
           
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label>Email Notifications</Label>
+              <Label className="text-black font-medium">Email Notifications</Label>
               <p className="text-sm text-gray-500">Receive notifications about overdue invoices</p>
             </div>
             <Switch
@@ -105,7 +105,7 @@ export const SettingsPreferences = () => {
           
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label>Auto Save</Label>
+              <Label className="text-black font-medium">Auto Save</Label>
               <p className="text-sm text-gray-500">Automatically save changes as you type</p>
             </div>
             <Switch
@@ -116,7 +116,7 @@ export const SettingsPreferences = () => {
           
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label>Compact Mode</Label>
+              <Label className="text-black font-medium">Compact Mode</Label>
               <p className="text-sm text-gray-500">Show more information in less space</p>
             </div>
             <Switch
@@ -127,7 +127,7 @@ export const SettingsPreferences = () => {
           
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label>Show Tutorials</Label>
+              <Label className="text-black font-medium">Show Tutorials</Label>
               <p className="text-sm text-gray-500">Display helpful tips and tutorials</p>
             </div>
             <Switch
@@ -137,15 +137,15 @@ export const SettingsPreferences = () => {
           </div>
 
           <div className="space-y-2">
-            <Label>Default Landing Page</Label>
+            <Label className="text-black font-medium">Default Landing Page</Label>
             <Select
               value={formData.defaultView}
               onValueChange={(value) => handleChange("defaultView", value)}
             >
-              <SelectTrigger>
+              <SelectTrigger className="border-gray-300 bg-white text-black">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white border-gray-200">
                 <SelectItem value="dashboard">Dashboard</SelectItem>
                 <SelectItem value="invoices">Invoices</SelectItem>
                 <SelectItem value="clients">Clients</SelectItem>
@@ -153,31 +153,39 @@ export const SettingsPreferences = () => {
             </Select>
           </div>
           
-          <Button onClick={handleSave} disabled={isLoading}>
+          <Button 
+            onClick={handleSave} 
+            disabled={isLoading}
+            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold"
+          >
             {isLoading ? "Saving..." : "Save Preferences"}
           </Button>
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Data Management</CardTitle>
-          <CardDescription>Backup and manage your invoice data</CardDescription>
+      <Card className="bg-white border-gray-200 shadow-sm">
+        <CardHeader className="bg-white border-b border-gray-200">
+          <CardTitle className="text-black">Data Management</CardTitle>
+          <CardDescription className="text-gray-600">Backup and manage your invoice data</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-4 bg-white p-6">
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label>Export Data</Label>
+              <Label className="text-black font-medium">Export Data</Label>
               <p className="text-sm text-gray-500">Download a backup of all your invoices and clients</p>
             </div>
-            <Button variant="outline" onClick={handleExportData}>
+            <Button 
+              variant="outline" 
+              onClick={handleExportData}
+              className="border-gray-300 text-black hover:bg-gray-50"
+            >
               Export Backup
             </Button>
           </div>
           
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label>Storage Usage</Label>
+              <Label className="text-black font-medium">Storage Usage</Label>
               <p className="text-sm text-gray-500">Local storage is being used for data</p>
             </div>
             <span className="text-sm font-medium text-green-600">Local Storage</span>
