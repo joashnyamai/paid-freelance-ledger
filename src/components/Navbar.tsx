@@ -31,20 +31,20 @@ export const Navbar = ({
   ];
 
   return (
-    <nav className="bg-white shadow-lg border-b-2 border-slate-200 sticky top-0 z-50">
+    <nav className="bg-white shadow-lg border-b-2 border-blue-600 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo/Brand */}
           <div className="flex items-center space-x-4">
-            <div className="bg-slate-900 p-2 rounded-lg">
+            <div className="bg-purple-600 p-2 rounded-lg">
               <Building2 className="h-6 w-6 text-white" />
             </div>
             <div className="flex-shrink-0">
-              <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
+              <h1 className="text-2xl font-bold text-black tracking-tight">
                 {businessName || 'Professional Invoice Portal'}
               </h1>
               {businessName && ownerName && (
-                <p className="text-sm text-slate-600 font-medium">{ownerName}</p>
+                <p className="text-sm text-gray-600 font-medium">{ownerName}</p>
               )}
             </div>
           </div>
@@ -58,14 +58,14 @@ export const Navbar = ({
                   onClick={() => onTabChange(item.id)}
                   className={`flex items-center px-4 py-3 rounded-lg text-sm font-semibold transition-all duration-200 ${
                     activeTab === item.id
-                      ? 'bg-slate-900 text-white shadow-lg'
-                      : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'
+                      ? 'bg-blue-600 text-white shadow-lg'
+                      : 'text-black hover:bg-orange-50 hover:text-black'
                   }`}
                 >
                   <item.icon className="h-4 w-4 mr-2" />
                   <span>{item.label}</span>
                   {item.count !== undefined && (
-                    <Badge variant="secondary" className="ml-2 bg-slate-200 text-slate-800 font-medium">
+                    <Badge variant="secondary" className="ml-2 bg-orange-100 text-black font-medium">
                       {item.count}
                     </Badge>
                   )}
@@ -78,7 +78,7 @@ export const Navbar = ({
           <div className="flex items-center space-x-4">
             <Button 
               onClick={onNewInvoice}
-              className="bg-slate-900 hover:bg-slate-800 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+              className="bg-purple-600 hover:bg-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
               size="lg"
             >
               <PlusCircle className="h-4 w-4 mr-2" />
@@ -90,7 +90,7 @@ export const Navbar = ({
           {/* Mobile menu button */}
           <div className="md:hidden">
             <button
-              className="bg-slate-100 inline-flex items-center justify-center p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-200 transition-colors"
+              className="bg-orange-50 inline-flex items-center justify-center p-2 rounded-lg text-gray-600 hover:text-black hover:bg-orange-100 transition-colors"
               onClick={() => {/* Mobile menu toggle logic can be added here */}}
             >
               <span className="sr-only">Open main menu</span>
@@ -104,15 +104,15 @@ export const Navbar = ({
 
       {/* Mobile Navigation */}
       <div className="md:hidden">
-        <div className="px-4 pt-2 pb-3 space-y-1 bg-slate-50 border-t">
+        <div className="px-4 pt-2 pb-3 space-y-1 bg-orange-50 border-t">
           {menuItems.map((item) => (
             <button
               key={item.id}
               onClick={() => onTabChange(item.id)}
               className={`flex items-center justify-between w-full px-4 py-3 rounded-lg text-base font-semibold transition-colors ${
                 activeTab === item.id
-                  ? 'bg-slate-900 text-white'
-                  : 'text-slate-700 hover:bg-slate-200'
+                  ? 'bg-blue-600 text-white'
+                  : 'text-black hover:bg-orange-100'
               }`}
             >
               <div className="flex items-center">
@@ -120,7 +120,7 @@ export const Navbar = ({
                 <span>{item.label}</span>
               </div>
               {item.count !== undefined && (
-                <Badge variant="secondary" className="bg-slate-200 text-slate-800">
+                <Badge variant="secondary" className="bg-orange-100 text-black">
                   {item.count}
                 </Badge>
               )}

@@ -23,14 +23,14 @@ export const Sidebar = ({ activeTab, onTabChange, onNewInvoice, invoiceCount, cl
   return (
     <div className="w-64 bg-white shadow-lg border-r border-gray-200 h-full">
       <div className="p-6 border-b border-gray-200">
-        <h1 className="text-2xl font-bold text-gray-900">Invoice Portal</h1>
+        <h1 className="text-2xl font-bold text-black">Invoice Portal</h1>
         <p className="text-sm text-gray-600">Freelance Management</p>
       </div>
       
       <div className="p-4">
         <Button 
           onClick={onNewInvoice}
-          className="w-full bg-blue-600 hover:bg-blue-700 mb-6"
+          className="w-full bg-purple-600 hover:bg-purple-700 mb-6"
         >
           <PlusCircle className="h-4 w-4 mr-2" />
           New Invoice
@@ -44,7 +44,7 @@ export const Sidebar = ({ activeTab, onTabChange, onNewInvoice, invoiceCount, cl
               className={`w-full flex items-center justify-between px-4 py-3 rounded-lg text-left transition-colors ${
                 activeTab === item.id 
                   ? 'bg-blue-50 text-blue-700 border border-blue-200' 
-                  : 'text-gray-700 hover:bg-gray-50'
+                  : 'text-black hover:bg-orange-50'
               }`}
             >
               <div className="flex items-center">
@@ -52,7 +52,7 @@ export const Sidebar = ({ activeTab, onTabChange, onNewInvoice, invoiceCount, cl
                 <span className="font-medium">{item.label}</span>
               </div>
               {item.count !== undefined && (
-                <Badge variant="secondary" className="bg-gray-100 text-gray-700">
+                <Badge variant="secondary" className="bg-orange-100 text-black">
                   {item.count}
                 </Badge>
               )}
