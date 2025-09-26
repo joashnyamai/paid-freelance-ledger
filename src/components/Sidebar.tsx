@@ -30,7 +30,7 @@ export const Sidebar = ({ activeTab, onTabChange, onNewInvoice, invoiceCount, cl
       <div className="p-4">
         <Button 
           onClick={onNewInvoice}
-          className="w-full bg-purple-600 hover:bg-purple-700 mb-6"
+          className="w-full bg-blue-600 hover:bg-blue-700 mb-6"
         >
           <PlusCircle className="h-4 w-4 mr-2" />
           New Invoice

@@ -362,8 +362,8 @@ export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePrevie
               {/* Invoice Details */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                 <div>
-                  <h3 className="font-semibold text-purple-600 mb-4 uppercase tracking-wide text-sm">Bill To</h3>
-                  <div className="bg-secondary p-6 rounded-lg border-l-4 border-purple-600">
+                  <h3 className="font-semibold text-blue-600 mb-4 uppercase tracking-wide text-sm">Bill To</h3>
+                  <div className="bg-secondary p-6 rounded-lg border-l-4 border-blue-600">
                     <div className="font-semibold text-black text-lg mb-1">{invoice.clientName}</div>
                     <div className="text-gray-600 mb-1">{invoice.clientEmail}</div>
                     <div className="text-gray-600 whitespace-pre-line">{invoice.clientAddress}</div>
@@ -371,7 +371,7 @@ export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePrevie
                 </div>
 
                 <div>
-                  <h3 className="font-semibold text-purple-600 mb-4 uppercase tracking-wide text-sm">Invoice Details</h3>
+                  <h3 className="font-semibold text-blue-600 mb-4 uppercase tracking-wide text-sm">Invoice Details</h3>
                   <div className="space-y-3">
                     <div className="flex justify-between">
                       <span className="text-gray-600">Issue Date:</span>
@@ -452,7 +452,7 @@ export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePrevie
               {/* Notes */}
               {invoice.notes && (
                 <div className="mb-6">
-                  <h3 className="font-semibold text-purple-600 mb-3 uppercase tracking-wide text-sm">Notes & Terms</h3>
+                  <h3 className="font-semibold text-blue-600 mb-3 uppercase tracking-wide text-sm">Notes & Terms</h3>
                   <div className="bg-secondary p-4 rounded-lg border-l-4 border-gray-400">
                     <p className="text-gray-700 whitespace-pre-line">{invoice.notes}</p>
                   </div>

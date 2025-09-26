@@ -36,7 +36,7 @@ export const Navbar = ({
         <div className="flex justify-between items-center h-20">
           {/* Logo/Brand */}
           <div className="flex items-center space-x-4">
-            <div className="bg-purple-600 p-2 rounded-lg">
+            <div className="bg-blue-600 p-2 rounded-lg">
               <Building2 className="h-6 w-6 text-white" />
             </div>
             <div className="flex-shrink-0">
@@ -78,7 +78,7 @@ export const Navbar = ({
           <div className="flex items-center space-x-4">
             <Button 
               onClick={onNewInvoice}
-              className="bg-purple-600 hover:bg-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
               size="lg"
             >
               <PlusCircle className="h-4 w-4 mr-2" />
