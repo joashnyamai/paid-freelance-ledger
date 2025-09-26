@@ -16,8 +16,8 @@
     --popover: 255 255 255; /* white */
     --popover-foreground: 0 0 0; /* black */
 
-    --primary: 37 99 235; /* blue-600 */
-    --primary-foreground: 255 255 255; /* white */
+    --primary: 255 255 255; /* white */
+    --primary-foreground: 0 0 0; /* black */
 
     --secondary: 248 250 252; /* gray-50 */
     --secondary-foreground: 0 0 0; /* black */
@@ -52,8 +52,8 @@
     --popover: 23 23 23;
     --popover-foreground: 255 255 255;
 
-    --primary: 59 130 246; /* blue-500 */
-    --primary-foreground: 0 0 0; /* black */
+    --primary: 0 0 0; /* black */
+    --primary-foreground: 255 255 255; /* white */
 
     --secondary: 38 38 38;
     --secondary-foreground: 255 255 255;
