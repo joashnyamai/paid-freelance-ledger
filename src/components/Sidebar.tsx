@@ -44,7 +44,7 @@ export const Sidebar = ({ activeTab, onTabChange, onNewInvoice, invoiceCount, cl
               className={`w-full flex items-center justify-between px-4 py-3 rounded-lg text-left transition-colors ${
                 activeTab === item.id 
                   ? 'bg-blue-50 text-blue-700 border border-blue-200' 
-                  : 'text-black hover:bg-orange-50'
+                  : 'text-black hover:bg-secondary'
               }`}
             >
               <div className="flex items-center">
@@ -52,7 +52,7 @@ export const Sidebar = ({ activeTab, onTabChange, onNewInvoice, invoiceCount, cl
                 <span className="font-medium">{item.label}</span>
               </div>
               {item.count !== undefined && (
-                <Badge variant="secondary" className="bg-orange-100 text-black">
+                <Badge variant="secondary" className="bg-secondary text-black">
                   {item.count}
                 </Badge>
               )}

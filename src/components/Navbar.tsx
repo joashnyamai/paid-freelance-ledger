@@ -59,13 +59,13 @@ export const Navbar = ({
                   className={`flex items-center px-4 py-3 rounded-lg text-sm font-semibold transition-all duration-200 ${
                     activeTab === item.id
                       ? 'bg-blue-600 text-white shadow-lg'
-                      : 'text-black hover:bg-orange-50 hover:text-black'
+                      : 'text-black hover:bg-secondary hover:text-black'
                   }`}
                 >
                   <item.icon className="h-4 w-4 mr-2" />
                   <span>{item.label}</span>
                   {item.count !== undefined && (
-                    <Badge variant="secondary" className="ml-2 bg-orange-100 text-black font-medium">
+                    <Badge variant="secondary" className="ml-2 bg-secondary text-black font-medium">
                       {item.count}
                     </Badge>
                   )}
@@ -90,7 +90,7 @@ export const Navbar = ({
           {/* Mobile menu button */}
           <div className="md:hidden">
             <button
-              className="bg-orange-50 inline-flex items-center justify-center p-2 rounded-lg text-gray-600 hover:text-black hover:bg-orange-100 transition-colors"
+              className="bg-secondary inline-flex items-center justify-center p-2 rounded-lg text-gray-600 hover:text-black hover:bg-secondary transition-colors"
               onClick={() => {/* Mobile menu toggle logic can be added here */}}
             >
               <span className="sr-only">Open main menu</span>
@@ -104,7 +104,7 @@ export const Navbar = ({
 
       {/* Mobile Navigation */}
       <div className="md:hidden">
-        <div className="px-4 pt-2 pb-3 space-y-1 bg-orange-50 border-t">
+        <div className="px-4 pt-2 pb-3 space-y-1 bg-secondary border-t">
           {menuItems.map((item) => (
             <button
               key={item.id}
@@ -112,7 +112,7 @@ export const Navbar = ({
               className={`flex items-center justify-between w-full px-4 py-3 rounded-lg text-base font-semibold transition-colors ${
                 activeTab === item.id
                   ? 'bg-blue-600 text-white'
-                  : 'text-black hover:bg-orange-100'
+                  : 'text-black hover:bg-secondary'
               }`}
             >
               <div className="flex items-center">
@@ -120,7 +120,7 @@ export const Navbar = ({
                 <span>{item.label}</span>
               </div>
               {item.count !== undefined && (
-                <Badge variant="secondary" className="bg-orange-100 text-black">
+                <Badge variant="secondary" className="bg-secondary text-black">
                   {item.count}
                 </Badge>
               )}

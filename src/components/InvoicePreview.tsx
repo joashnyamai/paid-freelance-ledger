@@ -347,7 +347,7 @@ export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePrevie
                   <div className="text-lg text-gray-600 mb-3">#{invoice.invoiceNumber}</div>
                   <span className={`px-3 py-1 rounded text-sm font-semibold ${
                     invoice.status === 'paid' ? 'bg-green-50 text-green-800' :
-                    invoice.status === 'pending' ? 'bg-orange-50 text-orange-800' :
+                    invoice.status === 'pending' ? 'bg-blue-50 text-blue-800' :
                     invoice.status === 'partially_paid' ? 'bg-blue-50 text-blue-800' :
                     'bg-red-50 text-red-800'
                   }`}>
@@ -363,7 +363,7 @@ export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePrevie
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                 <div>
                   <h3 className="font-semibold text-purple-600 mb-4 uppercase tracking-wide text-sm">Bill To</h3>
-                  <div className="bg-orange-50 p-6 rounded-lg border-l-4 border-purple-600">
+                  <div className="bg-secondary p-6 rounded-lg border-l-4 border-purple-600">
                     <div className="font-semibold text-black text-lg mb-1">{invoice.clientName}</div>
                     <div className="text-gray-600 mb-1">{invoice.clientEmail}</div>
                     <div className="text-gray-600 whitespace-pre-line">{invoice.clientAddress}</div>
@@ -403,7 +403,7 @@ export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePrevie
                     </thead>
                     <tbody>
                       {invoice.items.map((item, index) =>
-                        <tr key={item.id} className={index % 2 === 0 ? 'bg-white' : 'bg-orange-50'}>
+                        <tr key={item.id} className={index % 2 === 0 ? 'bg-white' : 'bg-secondary'}>
                           <td className="px-6 py-4 text-black">{item.description}</td>
                           <td className="px-6 py-4 text-center text-gray-700">{item.quantity}</td>
                           <td className="px-6 py-4 text-right font-medium text-black">
@@ -421,7 +421,7 @@ export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePrevie
 
               {/* Totals */}
               <div className="flex justify-end mb-8">
-                <div className="w-96 bg-orange-50 p-6 rounded-lg border border-gray-200">
+                <div className="w-96 bg-secondary p-6 rounded-lg border border-gray-200">
                   <div className="space-y-3">
                     <div className="flex justify-between text-gray-700">
                       <span>Subtotal:</span>
@@ -453,13 +453,13 @@ export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePrevie
               {invoice.notes && (
                 <div className="mb-6">
                   <h3 className="font-semibold text-purple-600 mb-3 uppercase tracking-wide text-sm">Notes & Terms</h3>
-                  <div className="bg-orange-50 p-4 rounded-lg border-l-4 border-gray-400">
+                  <div className="bg-secondary p-4 rounded-lg border-l-4 border-gray-400">
                     <p className="text-gray-700 whitespace-pre-line">{invoice.notes}</p>
                   </div>
                 </div>
               )}
               
-              <div className="bg-orange-50 p-6 rounded-lg border-l-4 border-gray-600">
+              <div className="bg-secondary p-6 rounded-lg border-l-4 border-gray-600">
                 <p className="text-gray-700 text-sm">
                   <strong>Payment Terms:</strong> Payment is due within 30 days of invoice date. 
                   Late payments may incur a 1.5% monthly service charge. 
