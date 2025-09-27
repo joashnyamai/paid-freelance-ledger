@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { X, Download } from "lucide-react";
 import { Invoice } from "@/pages/Index";
@@ -194,13 +193,13 @@ export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePrevie
           <div class="invoice-container">
             <div class="header">
               <div class="company-info">
-                <h1>Professional Services Ltd.</h1>
+                <h1>Malila Tech Solutions</h1>
                 <div class="company-details">
-                  123 Business Avenue<br>
-                  Nairobi, Kenya 00100<br>
-                  Phone: +254 700 123 456<br>
-                  Email: billing@professional.co.ke<br>
-                  VAT: KE123456789
+                  JUJA<br>
+                  Owner: James Nyamai<br>
+                  Phone: +254745806761<br>
+                  Email: nyamaibigjoash@gmail.com<br>
+                  Website: https://malilatechconsultancy.netlify.app/
                 </div>
               </div>
               <div class="invoice-title">
@@ -299,7 +298,7 @@ export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePrevie
             </div>
             
             <div class="footer">
-              Thank you for your business! | Professional Services Ltd. | www.professional.co.ke
+              Thank you for your business! | Malila Tech Solutions | https://malilatechconsultancy.netlify.app/
             </div>
           </div>
         </body>
@@ -333,13 +332,13 @@ export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePrevie
             <div className="p-8 border-b-2 border-blue-600">
               <div className="flex justify-between items-start">
                 <div className="flex-1">
-                  <h1 className="text-2xl font-bold text-black mb-2">Professional Services Ltd.</h1>
+                  <h1 className="text-2xl font-bold text-black mb-2">Malila Tech Solutions</h1>
                   <div className="text-gray-600 text-sm">
-                    123 Business Avenue<br />
-                    Nairobi, Kenya 00100<br />
-                    Phone: +254 700 123 456<br />
-                    Email: billing@professional.co.ke<br />
-                    VAT: KE123456789
+                    JUJA<br />
+                    Owner: James Nyamai<br />
+                    Phone: +254745806761<br />
+                    Email: nyamaibigjoash@gmail.com<br />
+                    Website: https://malilatechconsultancy.netlify.app/
                   </div>
                 </div>
                 <div className="text-right">
@@ -469,7 +468,7 @@ export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePrevie
 
               {/* Footer */}
               <div className="mt-8 pt-6 border-t border-gray-200 text-center text-gray-500 text-sm">
-                Thank you for your business! | Professional Services Ltd. | www.professional.co.ke
+                Thank you for your business! | Malila Tech Solutions | https://malilatechconsultancy.netlify.app/
               </div>
             </div>
           </div>
