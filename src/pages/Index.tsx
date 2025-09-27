@@ -14,6 +14,7 @@ import { SettingsInvoice } from "@/components/SettingsInvoice";
 import { SettingsPreferences } from "@/components/SettingsPreferences";
 import { toast } from "@/hooks/use-toast";
 import { useSettings } from "@/hooks/useSettings";
+import { useAuth } from "@/hooks/useAuth";
 import { DatabaseService } from "@/services/database";
 
 export interface Invoice {
@@ -54,6 +55,7 @@ export interface Client {
 
 const Index = () => {
   const { preferences, invoiceSettings, profile } = useSettings();
+  const { user } = useAuth();
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -68,14 +70,16 @@ const Index = () => {
     dateRange: "all"
   });
 
-  // Load data from Supabase on component mount
+  // Load data from localStorage on component mount
   useEffect(() => {
     const loadData = async () => {
+      if (!user?.id) return;
+      
       try {
         setLoading(true);
         const [invoicesData, clientsData] = await Promise.all([
-          DatabaseService.getInvoices(),
-          DatabaseService.getClients()
+          DatabaseService.getInvoices(user.id),
+          DatabaseService.getClients(user.id)
         ]);
         setInvoices(invoicesData);
         setClients(clientsData);
@@ -92,7 +96,7 @@ const Index = () => {
     };
 
     loadData();
-  }, []);
+  }, [user?.id]);
 
   // Set initial tab based on preferences
   useEffect(() => {
@@ -148,8 +152,10 @@ const Index = () => {
   }, [invoices, filters]);
 
   const handleCreateInvoice = async (invoiceData: Omit<Invoice, 'id' | 'invoiceNumber'>) => {
+    if (!user?.id) return;
+    
     try {
-      const newInvoice = await DatabaseService.addInvoice(invoiceData);
+      const newInvoice = await DatabaseService.addInvoice(invoiceData, user.id);
       setInvoices(prev => [newInvoice, ...prev]);
       setShowInvoiceForm(false);
       setEditingInvoice(null);
@@ -169,10 +175,10 @@ const Index = () => {
   };
 
   const handleUpdateInvoice = async (invoiceData: Omit<Invoice, 'id' | 'invoiceNumber'>) => {
-    if (!editingInvoice) return;
+    if (!editingInvoice || !user?.id) return;
     
     try {
-      const updatedInvoice = await DatabaseService.updateInvoice(editingInvoice.id, invoiceData);
+      const updatedInvoice = await DatabaseService.updateInvoice(editingInvoice.id, invoiceData, user.id);
       setInvoices(prev => prev.map(inv => inv.id === editingInvoice.id ? updatedInvoice : inv));
       setShowInvoiceForm(false);
       setEditingInvoice(null);
@@ -192,8 +198,10 @@ const Index = () => {
   };
 
   const handleAddClient = async (clientData: Omit<Client, 'id'>) => {
+    if (!user?.id) return;
+    
     try {
-      const newClient = await DatabaseService.addClient(clientData);
+      const newClient = await DatabaseService.addClient(clientData, user.id);
       setClients(prev => [newClient, ...prev]);
       
       toast({
@@ -221,8 +229,10 @@ const Index = () => {
   };
 
   const handleUpdateInvoiceStatus = async (invoiceId: string, status: Invoice['status']) => {
+    if (!user?.id) return;
+    
     try {
-      await DatabaseService.updateInvoiceStatus(invoiceId, status);
+      await DatabaseService.updateInvoiceStatus(invoiceId, status, user.id);
       setInvoices(prev => prev.map(inv => 
         inv.id === invoiceId ? { ...inv, status } : inv
       ));
@@ -242,8 +252,10 @@ const Index = () => {
   };
 
   const handleDeleteInvoice = async (invoiceId: string) => {
+    if (!user?.id) return;
+    
     try {
-      await DatabaseService.deleteInvoice(invoiceId);
+      await DatabaseService.deleteInvoice(invoiceId, user.id);
       setInvoices(prev => prev.filter(inv => inv.id !== invoiceId));
       
       toast({
@@ -261,9 +273,11 @@ const Index = () => {
   };
 
   const handleAddPayment = async (invoiceId: string, paymentAmount: number) => {
+    if (!user?.id) return;
+    
     try {
-      await DatabaseService.addPayment(invoiceId, paymentAmount);
-      const updatedInvoices = await DatabaseService.getInvoices();
+      await DatabaseService.addPayment(invoiceId, paymentAmount, user.id);
+      const updatedInvoices = await DatabaseService.getInvoices(user.id);
       setInvoices(updatedInvoices);
       
       toast({

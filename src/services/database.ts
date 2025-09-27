@@ -2,32 +2,32 @@ import { Invoice, Client, InvoiceItem } from '@/pages/Index'
 
 export class DatabaseService {
   // Client operations
-  static async getClients(): Promise<Client[]> {
-    const clients = localStorage.getItem('invoiceApp_clients')
+  static async getClients(userId: string): Promise<Client[]> {
+    const clients = localStorage.getItem(`invoiceApp_clients_${userId}`)
     return clients ? JSON.parse(clients) : []
   }
 
-  static async addClient(client: Omit<Client, 'id'>): Promise<Client> {
-    const clients = await this.getClients()
+  static async addClient(client: Omit<Client, 'id'>, userId: string): Promise<Client> {
+    const clients = await this.getClients(userId)
     const newClient = {
       ...client,
       id: crypto.randomUUID(),
     }
     
     const updatedClients = [newClient, ...clients]
-    localStorage.setItem('invoiceApp_clients', JSON.stringify(updatedClients))
+    localStorage.setItem(`invoiceApp_clients_${userId}`, JSON.stringify(updatedClients))
     
     return newClient
   }
 
   // Invoice operations
-  static async getInvoices(): Promise<Invoice[]> {
-    const invoices = localStorage.getItem('invoiceApp_invoices')
+  static async getInvoices(userId: string): Promise<Invoice[]> {
+    const invoices = localStorage.getItem(`invoiceApp_invoices_${userId}`)
     return invoices ? JSON.parse(invoices) : []
   }
 
-  static async addInvoice(invoiceData: Omit<Invoice, 'id' | 'invoiceNumber'>): Promise<Invoice> {
-    const invoices = await this.getInvoices()
+  static async addInvoice(invoiceData: Omit<Invoice, 'id' | 'invoiceNumber'>, userId: string): Promise<Invoice> {
+    const invoices = await this.getInvoices(userId)
     
     // Generate invoice number
     const invoiceNumber = `INV-${String(invoices.length + 1).padStart(4, '0')}`
@@ -45,13 +45,13 @@ export class DatabaseService {
     }
     
     const updatedInvoices = [newInvoice, ...invoices]
-    localStorage.setItem('invoiceApp_invoices', JSON.stringify(updatedInvoices))
+    localStorage.setItem(`invoiceApp_invoices_${userId}`, JSON.stringify(updatedInvoices))
     
     return newInvoice
   }
 
-  static async updateInvoice(invoiceId: string, invoiceData: Omit<Invoice, 'id' | 'invoiceNumber'>): Promise<Invoice> {
-    const invoices = await this.getInvoices()
+  static async updateInvoice(invoiceId: string, invoiceData: Omit<Invoice, 'id' | 'invoiceNumber'>, userId: string): Promise<Invoice> {
+    const invoices = await this.getInvoices(userId)
     const existingInvoice = invoices.find(inv => inv.id === invoiceId)
     
     if (!existingInvoice) {
@@ -72,29 +72,29 @@ export class DatabaseService {
       inv.id === invoiceId ? updatedInvoice : inv
     )
     
-    localStorage.setItem('invoiceApp_invoices', JSON.stringify(updatedInvoices))
+    localStorage.setItem(`invoiceApp_invoices_${userId}`, JSON.stringify(updatedInvoices))
     
     return updatedInvoice
   }
 
-  static async updateInvoiceStatus(invoiceId: string, status: Invoice['status']): Promise<void> {
-    const invoices = await this.getInvoices()
+  static async updateInvoiceStatus(invoiceId: string, status: Invoice['status'], userId: string): Promise<void> {
+    const invoices = await this.getInvoices(userId)
     const updatedInvoices = invoices.map(inv => 
       inv.id === invoiceId ? { ...inv, status } : inv
     )
     
-    localStorage.setItem('invoiceApp_invoices', JSON.stringify(updatedInvoices))
+    localStorage.setItem(`invoiceApp_invoices_${userId}`, JSON.stringify(updatedInvoices))
   }
 
-  static async deleteInvoice(invoiceId: string): Promise<void> {
-    const invoices = await this.getInvoices()
+  static async deleteInvoice(invoiceId: string, userId: string): Promise<void> {
+    const invoices = await this.getInvoices(userId)
     const updatedInvoices = invoices.filter(inv => inv.id !== invoiceId)
     
-    localStorage.setItem('invoiceApp_invoices', JSON.stringify(updatedInvoices))
+    localStorage.setItem(`invoiceApp_invoices_${userId}`, JSON.stringify(updatedInvoices))
   }
 
-  static async addPayment(invoiceId: string, paymentAmount: number): Promise<void> {
-    const invoices = await this.getInvoices()
+  static async addPayment(invoiceId: string, paymentAmount: number, userId: string): Promise<void> {
+    const invoices = await this.getInvoices(userId)
     const updatedInvoices = invoices.map(inv => {
       if (inv.id === invoiceId) {
         const newAmountPaid = (inv.amountPaid || 0) + paymentAmount
@@ -117,6 +117,6 @@ export class DatabaseService {
       return inv
     })
     
-    localStorage.setItem('invoiceApp_invoices', JSON.stringify(updatedInvoices))
+    localStorage.setItem(`invoiceApp_invoices_${userId}`, JSON.stringify(updatedInvoices))
   }
 }

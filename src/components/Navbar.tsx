@@ -2,7 +2,8 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Home, FileText, Users, Settings, PlusCircle, Building2 } from "lucide-react";
+import { Home, FileText, Users, Settings, PlusCircle, Building2, LogOut } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 interface NavbarProps {
   activeTab: string;
@@ -23,6 +24,11 @@ export const Navbar = ({
   businessName,
   ownerName 
 }: NavbarProps) => {
+  const { user, logout } = useAuth();
+  
+  const handleLogout = () => {
+    logout();
+  };
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: Home },
     { id: 'invoices', label: 'Invoices', icon: FileText, count: invoiceCount },
@@ -76,6 +82,13 @@ export const Navbar = ({
 
           {/* CTA Button */}
           <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-3">
+              <div className="text-right">
+                <p className="text-sm font-medium text-black">Welcome, {user?.name}</p>
+                <p className="text-xs text-gray-600">{user?.email}</p>
+              </div>
+            </div>
+            
             <Button 
               onClick={onNewInvoice}
               className="bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
@@ -84,6 +97,16 @@ export const Navbar = ({
               <PlusCircle className="h-4 w-4 mr-2" />
               <span className="hidden sm:inline">Create Invoice</span>
               <span className="sm:hidden">New</span>
+            </Button>
+
+            <Button
+              onClick={handleLogout}
+              variant="outline"
+              size="lg"
+              className="border-gray-300 text-gray-700 hover:bg-gray-50"
+            >
+              <LogOut className="h-4 w-4 mr-2" />
+              <span className="hidden sm:inline">Logout</span>
             </Button>
           </div>
 
