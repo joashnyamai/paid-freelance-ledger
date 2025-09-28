@@ -21,6 +21,11 @@ export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePrevie
   };
 
   const handleDownload = () => {
+    // Generate filename using business name and invoice number
+    const businessName = profile.businessName || 'Business';
+    const cleanBusinessName = businessName.replace(/[^a-zA-Z0-9\s]/g, '').replace(/\s+/g, '_');
+    const filename = `${cleanBusinessName}_Invoice_${invoice.invoiceNumber}.pdf`;
+    
     // Create a clean printable version
     const printWindow = window.open('', '_blank');
     if (printWindow) {
@@ -28,7 +33,7 @@ export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePrevie
         <!DOCTYPE html>
         <html>
         <head>
-          <title>Invoice ${invoice.invoiceNumber}</title>
+          <title>${filename}</title>
           <style>
             * { margin: 0; padding: 0; box-sizing: border-box; }
             body { 
@@ -189,6 +194,10 @@ export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePrevie
               padding-top: 20px;
               border-top: 1px solid #e5e7eb;
             }
+            @media print {
+              body { padding: 20px; }
+              .no-print { display: none !important; }
+            }
           </style>
         </head>
         <body>
@@ -303,11 +312,19 @@ export const InvoicePreview = ({ invoice, onClose, onAddPayment }: InvoicePrevie
               Thank you for your business! | ${profile.businessName || 'Your Business Name'} | ${profile.website || 'www.yourwebsite.com'}
             </div>
           </div>
+          <script>
+            // Set document title for printing/saving
+            document.title = '${filename}';
+            
+            // Auto-trigger print dialog
+            window.onload = function() {
+              window.print();
+            };
+          </script>
         </body>
         </html>
       `);
       printWindow.document.close();
-      printWindow.print();
     }
   };
 
