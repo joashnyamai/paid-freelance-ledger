@@ -85,6 +85,10 @@ const Index = () => {
             title: "Data Recovered",
             description: `Successfully recovered ${migrationResult.invoicesMigrated} invoices and ${migrationResult.clientsMigrated} clients from before authentication was added.`,
           });
+        } else {
+          // If no data was migrated, run debug to help troubleshoot
+          DatabaseService.debugLocalStorage();
+          console.log('No data found to migrate. Check the console above for available localStorage keys.');
         }
         
         const [invoicesData, clientsData] = await Promise.all([

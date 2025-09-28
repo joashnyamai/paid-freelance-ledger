@@ -6,19 +6,36 @@ export class DatabaseService {
     let invoicesMigrated = 0;
     let clientsMigrated = 0;
 
-    // Check for old invoice data (various possible keys)
-    const oldInvoiceKeys = ['invoices', 'invoiceApp_invoices', 'invoice-app-invoices'];
+    console.log('Starting data migration for user:', userId);
+    console.log('Available localStorage keys:', Object.keys(localStorage));
+
+    // Check for old invoice data (comprehensive list of possible keys)
+    const oldInvoiceKeys = [
+      'invoices', 
+      'invoiceApp_invoices', 
+      'invoice-app-invoices',
+      'invoice_data',
+      'invoice-data',
+      'app_invoices',
+      'app-invoices'
+    ];
+    
     for (const key of oldInvoiceKeys) {
       const oldInvoices = localStorage.getItem(key);
+      console.log(`Checking key: ${key}`, oldInvoices ? 'Found data' : 'No data');
+      
       if (oldInvoices) {
         try {
           const parsedInvoices = JSON.parse(oldInvoices);
           if (Array.isArray(parsedInvoices) && parsedInvoices.length > 0) {
+            console.log(`Found ${parsedInvoices.length} invoices in ${key}`);
+            
             // Check if user already has invoices to avoid overwriting
             const existingInvoices = await this.getInvoices(userId);
             if (existingInvoices.length === 0) {
               localStorage.setItem(`invoiceApp_invoices_${userId}`, oldInvoices);
               invoicesMigrated = parsedInvoices.length;
+              console.log(`Migrated ${invoicesMigrated} invoices to user ${userId}`);
             }
             // Keep old data as backup
             localStorage.setItem(`${key}_backup`, oldInvoices);
@@ -31,18 +48,32 @@ export class DatabaseService {
     }
 
     // Check for old client data
-    const oldClientKeys = ['clients', 'invoiceApp_clients', 'invoice-app-clients'];
+    const oldClientKeys = [
+      'clients', 
+      'invoiceApp_clients', 
+      'invoice-app-clients',
+      'client_data',
+      'client-data',
+      'app_clients',
+      'app-clients'
+    ];
+    
     for (const key of oldClientKeys) {
       const oldClients = localStorage.getItem(key);
+      console.log(`Checking key: ${key}`, oldClients ? 'Found data' : 'No data');
+      
       if (oldClients) {
         try {
           const parsedClients = JSON.parse(oldClients);
           if (Array.isArray(parsedClients) && parsedClients.length > 0) {
+            console.log(`Found ${parsedClients.length} clients in ${key}`);
+            
             // Check if user already has clients to avoid overwriting
             const existingClients = await this.getClients(userId);
             if (existingClients.length === 0) {
               localStorage.setItem(`invoiceApp_clients_${userId}`, oldClients);
               clientsMigrated = parsedClients.length;
+              console.log(`Migrated ${clientsMigrated} clients to user ${userId}`);
             }
             // Keep old data as backup
             localStorage.setItem(`${key}_backup`, oldClients);
@@ -54,7 +85,31 @@ export class DatabaseService {
       }
     }
 
+    console.log(`Migration complete: ${invoicesMigrated} invoices, ${clientsMigrated} clients`);
     return { invoicesMigrated, clientsMigrated };
+  }
+
+  // Debug helper to show all localStorage data
+  static debugLocalStorage(): void {
+    console.log('=== localStorage Debug ===');
+    console.log('All keys:', Object.keys(localStorage));
+    
+    Object.keys(localStorage).forEach(key => {
+      const value = localStorage.getItem(key);
+      if (value) {
+        try {
+          const parsed = JSON.parse(value);
+          if (Array.isArray(parsed)) {
+            console.log(`${key}: Array with ${parsed.length} items`);
+          } else {
+            console.log(`${key}: Object with keys:`, Object.keys(parsed));
+          }
+        } catch {
+          console.log(`${key}: String value (${value.length} chars)`);
+        }
+      }
+    });
+    console.log('=== End Debug ===');
   }
 
   // Client operations
