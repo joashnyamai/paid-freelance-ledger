@@ -77,6 +77,16 @@ const Index = () => {
       
       try {
         setLoading(true);
+        
+        // First, try to migrate any old data
+        const migrationResult = await DatabaseService.migrateOldData(user.id);
+        if (migrationResult.invoicesMigrated > 0 || migrationResult.clientsMigrated > 0) {
+          toast({
+            title: "Data Recovered",
+            description: `Successfully recovered ${migrationResult.invoicesMigrated} invoices and ${migrationResult.clientsMigrated} clients from before authentication was added.`,
+          });
+        }
+        
         const [invoicesData, clientsData] = await Promise.all([
           DatabaseService.getInvoices(user.id),
           DatabaseService.getClients(user.id)

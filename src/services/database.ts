@@ -1,6 +1,62 @@
 import { Invoice, Client, InvoiceItem } from '@/pages/Index'
 
 export class DatabaseService {
+  // Migration helper to recover old data
+  static async migrateOldData(userId: string): Promise<{ invoicesMigrated: number, clientsMigrated: number }> {
+    let invoicesMigrated = 0;
+    let clientsMigrated = 0;
+
+    // Check for old invoice data (various possible keys)
+    const oldInvoiceKeys = ['invoices', 'invoiceApp_invoices', 'invoice-app-invoices'];
+    for (const key of oldInvoiceKeys) {
+      const oldInvoices = localStorage.getItem(key);
+      if (oldInvoices) {
+        try {
+          const parsedInvoices = JSON.parse(oldInvoices);
+          if (Array.isArray(parsedInvoices) && parsedInvoices.length > 0) {
+            // Check if user already has invoices to avoid overwriting
+            const existingInvoices = await this.getInvoices(userId);
+            if (existingInvoices.length === 0) {
+              localStorage.setItem(`invoiceApp_invoices_${userId}`, oldInvoices);
+              invoicesMigrated = parsedInvoices.length;
+            }
+            // Keep old data as backup
+            localStorage.setItem(`${key}_backup`, oldInvoices);
+            break;
+          }
+        } catch (error) {
+          console.error(`Error migrating invoices from ${key}:`, error);
+        }
+      }
+    }
+
+    // Check for old client data
+    const oldClientKeys = ['clients', 'invoiceApp_clients', 'invoice-app-clients'];
+    for (const key of oldClientKeys) {
+      const oldClients = localStorage.getItem(key);
+      if (oldClients) {
+        try {
+          const parsedClients = JSON.parse(oldClients);
+          if (Array.isArray(parsedClients) && parsedClients.length > 0) {
+            // Check if user already has clients to avoid overwriting
+            const existingClients = await this.getClients(userId);
+            if (existingClients.length === 0) {
+              localStorage.setItem(`invoiceApp_clients_${userId}`, oldClients);
+              clientsMigrated = parsedClients.length;
+            }
+            // Keep old data as backup
+            localStorage.setItem(`${key}_backup`, oldClients);
+            break;
+          }
+        } catch (error) {
+          console.error(`Error migrating clients from ${key}:`, error);
+        }
+      }
+    }
+
+    return { invoicesMigrated, clientsMigrated };
+  }
+
   // Client operations
   static async getClients(userId: string): Promise<Client[]> {
     const clients = localStorage.getItem(`invoiceApp_clients_${userId}`)
