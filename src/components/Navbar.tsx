@@ -1,8 +1,9 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Home, FileText, Users, Settings, PlusCircle, Building2, LogOut, User } from "lucide-react";
+import { Home, FileText, Users, Settings, PlusCircle, Building2, LogOut, User, Moon, Sun } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { useSettings } from "@/hooks/useSettings";
 
 interface NavbarProps {
   activeTab: string;
@@ -24,9 +25,14 @@ export const Navbar = ({
   ownerName 
 }: NavbarProps) => {
   const { user, logout } = useAuth();
+  const { preferences, updatePreferences } = useSettings();
   
   const handleLogout = () => {
     logout();
+  };
+
+  const toggleDarkMode = () => {
+    updatePreferences({ ...preferences, darkMode: !preferences.darkMode });
   };
 
   const menuItems = [
@@ -37,7 +43,7 @@ export const Navbar = ({
   ];
 
   return (
-    <nav className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+    <nav className="bg-background border-b border-border sticky top-0 z-50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo/Brand Section */}
@@ -47,11 +53,11 @@ export const Navbar = ({
                 <Building2 className="h-6 w-6 text-white" />
               </div>
               <div className="flex flex-col">
-                <h1 className="text-xl font-bold text-gray-900 tracking-tight">
+                <h1 className="text-xl font-bold text-foreground tracking-tight">
                   {businessName || 'Invoice Portal'}
                 </h1>
                 {businessName && ownerName && (
-                  <p className="text-xs text-gray-500 font-medium">{ownerName}</p>
+                  <p className="text-xs text-muted-foreground font-medium">{ownerName}</p>
                 )}
               </div>
             </div>
@@ -66,8 +72,8 @@ export const Navbar = ({
                 onClick={() => onTabChange(item.id)}
                 className={`relative px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
                   activeTab === item.id
-                    ? 'bg-blue-600 text-white shadow-md'
-                    : 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'
+                    ? 'bg-accent text-accent-foreground shadow-md'
+                    : 'text-foreground hover:bg-accent/10'
                 }`}
               >
                 <item.icon className="h-4 w-4 mr-2" />
@@ -77,8 +83,8 @@ export const Navbar = ({
                     variant="secondary" 
                     className={`absolute -top-1 -right-1 h-5 min-w-5 flex items-center justify-center text-xs ${
                       activeTab === item.id 
-                        ? 'bg-white text-blue-600' 
-                        : 'bg-blue-100 text-blue-700'
+                        ? 'bg-background text-accent' 
+                        : 'bg-accent/20 text-accent'
                     }`}
                   >
                     {item.count}
@@ -91,15 +97,15 @@ export const Navbar = ({
           {/* Right Section - User Info & Actions */}
           <div className="flex items-center space-x-3">
             {/* User Info */}
-            <div className="hidden md:flex items-center space-x-3 bg-gray-50 rounded-lg px-3 py-2">
-              <div className="bg-blue-100 p-1.5 rounded-full">
-                <User className="h-4 w-4 text-blue-600" />
+            <div className="hidden md:flex items-center space-x-3 bg-muted rounded-lg px-3 py-2">
+              <div className="bg-accent/20 p-1.5 rounded-full">
+                <User className="h-4 w-4 text-accent" />
               </div>
               <div className="text-right">
-                <p className="text-sm font-medium text-gray-900 truncate max-w-[120px]">
+                <p className="text-sm font-medium text-foreground truncate max-w-[120px]">
                   {user?.name}
                 </p>
-                <p className="text-xs text-gray-500 truncate max-w-[120px]">
+                <p className="text-xs text-muted-foreground truncate max-w-[120px]">
                   {user?.email}
                 </p>
               </div>
@@ -108,8 +114,23 @@ export const Navbar = ({
             {/* Action Buttons */}
             <div className="flex items-center space-x-2">
               <Button 
+                onClick={toggleDarkMode}
+                variant="outline"
+                size="sm"
+                className="border-border hover:bg-muted transition-colors"
+                title={preferences.darkMode ? "Switch to light mode" : "Switch to dark mode"}
+              >
+                {preferences.darkMode ? (
+                  <Sun className="h-4 w-4" />
+                ) : (
+                  <Moon className="h-4 w-4" />
+                )}
+                <span className="sr-only">Toggle theme</span>
+              </Button>
+
+              <Button 
                 onClick={onNewInvoice}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-md hover:shadow-lg transition-all duration-200 group"
+                className="bg-accent hover:bg-accent/90 text-accent-foreground font-semibold shadow-md hover:shadow-lg transition-all duration-200 group"
                 size="sm"
               >
                 <PlusCircle className="h-4 w-4 mr-2 group-hover:scale-110 transition-transform" />
@@ -121,7 +142,7 @@ export const Navbar = ({
                 onClick={handleLogout}
                 variant="outline"
                 size="sm"
-                className="border-gray-300 text-gray-600 hover:text-gray-700 hover:border-gray-400 transition-colors"
+                className="border-border hover:bg-muted transition-colors"
               >
                 <LogOut className="h-4 w-4" />
                 <span className="sr-only">Logout</span>
@@ -133,7 +154,7 @@ export const Navbar = ({
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-gray-600 hover:text-gray-900"
+                className="text-muted-foreground hover:text-foreground"
                 onClick={() => {/* Mobile menu toggle logic */}}
               >
                 <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -146,7 +167,7 @@ export const Navbar = ({
       </div>
 
       {/* Mobile Navigation */}
-      <div className="lg:hidden border-t border-gray-200 bg-white">
+      <div className="lg:hidden border-t border-border bg-background">
         <div className="px-2 pt-2 pb-3 space-y-1">
           {menuItems.map((item) => (
             <Button
@@ -155,8 +176,8 @@ export const Navbar = ({
               onClick={() => onTabChange(item.id)}
               className={`w-full justify-start px-4 py-3 rounded-lg font-medium transition-colors ${
                 activeTab === item.id
-                  ? 'bg-blue-600 text-white'
-                  : 'text-gray-700 hover:bg-gray-100'
+                  ? 'bg-accent text-accent-foreground'
+                  : 'text-foreground hover:bg-muted'
               }`}
             >
               <item.icon className="h-5 w-5 mr-3" />
@@ -166,8 +187,8 @@ export const Navbar = ({
                   variant="secondary" 
                   className={`ml-2 ${
                     activeTab === item.id 
-                      ? 'bg-white text-blue-600' 
-                      : 'bg-gray-200 text-gray-700'
+                      ? 'bg-background text-accent' 
+                      : 'bg-muted text-muted-foreground'
                   }`}
                 >
                   {item.count}
@@ -178,16 +199,16 @@ export const Navbar = ({
         </div>
         
         {/* Mobile User Info */}
-        <div className="px-4 py-3 border-t border-gray-200 bg-gray-50">
+        <div className="px-4 py-3 border-t border-border bg-muted">
           <div className="flex items-center space-x-3">
-            <div className="bg-blue-100 p-2 rounded-full">
-              <User className="h-4 w-4 text-blue-600" />
+            <div className="bg-accent/20 p-2 rounded-full">
+              <User className="h-4 w-4 text-accent" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-gray-900 truncate">
+              <p className="text-sm font-medium text-foreground truncate">
                 {user?.name}
               </p>
-              <p className="text-xs text-gray-500 truncate">
+              <p className="text-xs text-muted-foreground truncate">
                 {user?.email}
               </p>
             </div>
