@@ -70,25 +70,21 @@ const Index = () => {
     dateRange: "all"
   });
 
-  // Load data from localStorage on component mount
+  // Load data from Firestore and migrate localStorage data if needed
   useEffect(() => {
     const loadData = async () => {
-      if (!user?.id) return;
+      if (!user?.id || !user?.email) return;
       
       try {
         setLoading(true);
         
-        // First, try to migrate any old data
-        const migrationResult = await DatabaseService.migrateOldData(user.id);
+        // First, try to migrate any localStorage data to Firestore
+        const migrationResult = await DatabaseService.migrateLocalStorageToFirestore(user.id, user.email);
         if (migrationResult.invoicesMigrated > 0 || migrationResult.clientsMigrated > 0) {
           toast({
-            title: "Data Recovered",
-            description: `Successfully recovered ${migrationResult.invoicesMigrated} invoices and ${migrationResult.clientsMigrated} clients from before authentication was added.`,
+            title: "Data Migrated",
+            description: `Successfully migrated ${migrationResult.invoicesMigrated} invoices and ${migrationResult.clientsMigrated} clients to cloud storage.`,
           });
-        } else {
-          // If no data was migrated, run debug to help troubleshoot
-          DatabaseService.debugLocalStorage();
-          console.log('No data found to migrate. Check the console above for available localStorage keys.');
         }
         
         const [invoicesData, clientsData] = await Promise.all([
@@ -110,7 +106,7 @@ const Index = () => {
     };
 
     loadData();
-  }, [user?.id]);
+  }, [user?.id, user?.email]);
 
   // Set initial tab based on preferences
   useEffect(() => {

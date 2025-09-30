@@ -1,4 +1,13 @@
 import { useState, useEffect, createContext, useContext } from 'react';
+import { 
+  signInWithEmailAndPassword, 
+  createUserWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+  User as FirebaseUser
+} from 'firebase/auth';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { auth, db } from '@/lib/firebase';
 
 export interface User {
   id: string;
@@ -30,31 +39,33 @@ export const useAuthProvider = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is logged in on app start
-    const storedUser = localStorage.getItem('invoiceApp_user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-    setIsLoading(false);
+    // Listen to auth state changes
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser: FirebaseUser | null) => {
+      if (firebaseUser) {
+        // Get user data from Firestore
+        const userDoc = await getDoc(doc(db, 'users', firebaseUser.uid));
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          setUser({
+            id: firebaseUser.uid,
+            email: firebaseUser.email!,
+            name: userData.name,
+            createdAt: userData.createdAt
+          });
+        }
+      } else {
+        setUser(null);
+      }
+      setIsLoading(false);
+    });
+
+    return () => unsubscribe();
   }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
     try {
-      // Get stored users
-      const storedUsers = localStorage.getItem('invoiceApp_users');
-      const users = storedUsers ? JSON.parse(storedUsers) : [];
-      
-      // Find user with matching email and password
-      const foundUser = users.find((u: any) => u.email === email && u.password === password);
-      
-      if (foundUser) {
-        const { password: _, ...userWithoutPassword } = foundUser;
-        setUser(userWithoutPassword);
-        localStorage.setItem('invoiceApp_user', JSON.stringify(userWithoutPassword));
-        return true;
-      }
-      
-      return false;
+      await signInWithEmailAndPassword(auth, email, password);
+      return true;
     } catch (error) {
       console.error('Login error:', error);
       return false;
@@ -63,33 +74,14 @@ export const useAuthProvider = () => {
 
   const signup = async (email: string, password: string, name: string): Promise<boolean> => {
     try {
-      // Get stored users
-      const storedUsers = localStorage.getItem('invoiceApp_users');
-      const users = storedUsers ? JSON.parse(storedUsers) : [];
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       
-      // Check if user already exists
-      const existingUser = users.find((u: any) => u.email === email);
-      if (existingUser) {
-        return false;
-      }
-      
-      // Create new user
-      const newUser = {
-        id: Date.now().toString(),
-        email,
-        password, // In a real app, this should be hashed
+      // Create user document in Firestore
+      await setDoc(doc(db, 'users', userCredential.user.uid), {
         name,
+        email,
         createdAt: new Date().toISOString()
-      };
-      
-      // Add to users array
-      users.push(newUser);
-      localStorage.setItem('invoiceApp_users', JSON.stringify(users));
-      
-      // Log in the new user
-      const { password: _, ...userWithoutPassword } = newUser;
-      setUser(userWithoutPassword);
-      localStorage.setItem('invoiceApp_user', JSON.stringify(userWithoutPassword));
+      });
       
       return true;
     } catch (error) {
@@ -98,9 +90,12 @@ export const useAuthProvider = () => {
     }
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('invoiceApp_user');
+  const logout = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
   };
 
   return {
