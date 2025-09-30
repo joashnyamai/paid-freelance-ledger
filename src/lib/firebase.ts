@@ -88,7 +88,13 @@ export const sendEmailVerification = async (user: FirebaseUser) => {
 
 export const sendPasswordResetEmail = async (email: string) => {
   try {
-    await firebaseSendPasswordResetEmail(auth, email);
+    // Get the current domain
+    const actionCodeSettings = {
+      url: `${window.location.origin}/password-reset`,
+      handleCodeInApp: true
+    };
+    
+    await firebaseSendPasswordResetEmail(auth, email, actionCodeSettings);
     return true;
   } catch (error) {
     console.error("Error sending password reset email:", error);
