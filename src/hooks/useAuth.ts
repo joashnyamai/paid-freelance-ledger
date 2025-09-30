@@ -62,6 +62,14 @@ export const useAuthProvider = () => {
     console.log('Setting up auth state listener...');
     
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      console.log('ProtectedRoute: Loading authentication state...');
+      console.log('ProtectedRoute - Auth state changed:', { 
+        user: firebaseUser ? { 
+          uid: firebaseUser.uid,
+          email: firebaseUser.email,
+          emailVerified: firebaseUser.emailVerified 
+        } : null 
+      });
       if (firebaseUser) {
         setIsEmailVerified(firebaseUser.emailVerified);
       }
@@ -296,9 +304,15 @@ export const useAuthProvider = () => {
 
   const sendPasswordResetEmail = async (email: string) => {
     try {
-      await firebaseSendPasswordResetEmail(auth, email, {
-        url: `${window.location.origin}/login`
-      });
+      console.log('Sending password reset email to:', email);
+      const actionCodeSettings = {
+        url: `${window.location.origin}/password-reset`,
+        handleCodeInApp: true
+      };
+      
+      console.log('Action code settings:', actionCodeSettings);
+      await firebaseSendPasswordResetEmail(auth, email, actionCodeSettings);
+      console.log('Password reset email sent successfully');
       return true;
     } catch (error: any) {
       console.error('Error sending password reset email:', error);

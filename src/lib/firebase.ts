@@ -22,14 +22,28 @@ type ActionCodeInfo = {
 import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBt2jPDjPWh5wqPhRbnVAY9mb98kkoIzv0",
-  authDomain: "smart-car-parking-1862c.firebaseapp.com",
-  projectId: "smart-car-parking-1862c",
-  storageBucket: "smart-car-parking-1862c.firebasestorage.app",
-  messagingSenderId: "472243026153",
-  appId: "1:472243026153:web:c37f2ead2ac9861632d878",
-  measurementId: "G-7H9S8EV884"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
+
+// Validate required environment variables
+const requiredEnvVars = [
+  'VITE_FIREBASE_API_KEY',
+  'VITE_FIREBASE_AUTH_DOMAIN',
+  'VITE_FIREBASE_PROJECT_ID'
+];
+
+for (const envVar of requiredEnvVars) {
+  if (!import.meta.env[envVar]) {
+    console.error(`Missing required environment variable: ${envVar}`);
+    throw new Error(`Firebase configuration error: ${envVar} is not set`);
+  }
+}
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
