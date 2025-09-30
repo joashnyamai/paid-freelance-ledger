@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Home, FileText, Users, Settings, PlusCircle, Building2, LogOut, User, Moon, Sun } from "lucide-react";
@@ -26,6 +26,7 @@ export const Navbar = ({
 }: NavbarProps) => {
   const { user, logout } = useAuth();
   const { preferences, updatePreferences } = useSettings();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
   const handleLogout = () => {
     logout();
@@ -33,6 +34,15 @@ export const Navbar = ({
 
   const toggleDarkMode = () => {
     updatePreferences({ ...preferences, darkMode: !preferences.darkMode });
+  };
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const handleTabChange = (tab: string) => {
+    onTabChange(tab);
+    setIsMobileMenuOpen(false);
   };
 
   const menuItems = [
@@ -155,11 +165,19 @@ export const Navbar = ({
                 variant="ghost"
                 size="sm"
                 className="text-muted-foreground hover:text-foreground"
-                onClick={() => {/* Mobile menu toggle logic */}}
+                onClick={toggleMobileMenu}
+                aria-expanded={isMobileMenuOpen}
+                aria-label="Toggle menu"
               >
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
+                {isMobileMenuOpen ? (
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                ) : (
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                )}
               </Button>
             </div>
           </div>
@@ -167,54 +185,39 @@ export const Navbar = ({
       </div>
 
       {/* Mobile Navigation */}
-      <div className="lg:hidden border-t border-border bg-background">
-        <div className="px-2 pt-2 pb-3 space-y-1">
-          {menuItems.map((item) => (
-            <Button
-              key={item.id}
-              variant={activeTab === item.id ? "default" : "ghost"}
-              onClick={() => onTabChange(item.id)}
-              className={`w-full justify-start px-4 py-3 rounded-lg font-medium transition-colors ${
-                activeTab === item.id
-                  ? 'bg-accent text-accent-foreground'
-                  : 'text-foreground hover:bg-muted'
-              }`}
-            >
-              <item.icon className="h-5 w-5 mr-3" />
-              <span className="flex-1 text-left">{item.label}</span>
-              {item.count !== undefined && (
-                <Badge 
-                  variant="secondary" 
-                  className={`ml-2 ${
-                    activeTab === item.id 
-                      ? 'bg-background text-accent' 
-                      : 'bg-muted text-muted-foreground'
-                  }`}
-                >
-                  {item.count}
-                </Badge>
-              )}
-            </Button>
-          ))}
-        </div>
-        
-        {/* Mobile User Info */}
-        <div className="px-4 py-3 border-t border-border bg-muted">
-          <div className="flex items-center space-x-3">
-            <div className="bg-accent/20 p-2 rounded-full">
-              <User className="h-4 w-4 text-accent" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-foreground truncate">
-                {user?.name}
-              </p>
-              <p className="text-xs text-muted-foreground truncate">
-                {user?.email}
-              </p>
-            </div>
+      {isMobileMenuOpen && (
+        <div className="lg:hidden border-t border-border bg-background">
+          <div className="px-2 pt-2 pb-3 space-y-1">
+            {menuItems.map((item) => (
+              <Button
+                key={item.id}
+                variant={activeTab === item.id ? "default" : "ghost"}
+                onClick={() => handleTabChange(item.id)}
+                className={`w-full justify-start px-4 py-3 rounded-lg font-medium transition-colors ${
+                  activeTab === item.id
+                    ? 'bg-accent text-accent-foreground'
+                    : 'text-foreground hover:bg-muted'
+                }`}
+              >
+                <item.icon className="h-5 w-5 mr-3" />
+                <span className="flex-1 text-left">{item.label}</span>
+                {item.count !== undefined && (
+                  <Badge 
+                    variant="secondary" 
+                    className={`ml-2 ${
+                      activeTab === item.id 
+                        ? 'bg-background text-accent' 
+                        : 'bg-muted text-muted-foreground'
+                    }`}
+                  >
+                    {item.count}
+                  </Badge>
+                )}
+              </Button>
+            ))}
           </div>
         </div>
-      </div>
+      )}
     </nav>
   );
 };

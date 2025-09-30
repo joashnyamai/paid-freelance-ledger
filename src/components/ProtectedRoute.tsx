@@ -1,5 +1,5 @@
-import { ReactNode } from 'react';
-import { Navigate } from 'react-router-dom';
+import { ReactNode, useEffect, useState } from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 
 interface ProtectedRouteProps {
@@ -8,8 +8,28 @@ interface ProtectedRouteProps {
 
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const { user, isLoading } = useAuth();
+  const location = useLocation();
+  const [lastPath, setLastPath] = useState(location.pathname);
+
+  // Update last path when location changes
+  useEffect(() => {
+    if (location.pathname !== lastPath) {
+      console.log('Route changed from', lastPath, 'to', location.pathname);
+      setLastPath(location.pathname);
+    }
+  }, [location, lastPath]);
+
+  useEffect(() => {
+    console.log('ProtectedRoute - Auth state changed:', {
+      isLoading,
+      user: user ? { id: user.id, email: user.email } : null,
+      currentPath: location.pathname,
+      timestamp: new Date().toISOString()
+    });
+  }, [user, isLoading, location.pathname]);
 
   if (isLoading) {
+    console.log('ProtectedRoute: Loading authentication state...');
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -21,8 +41,11 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   }
 
   if (!user) {
-    return <Navigate to="/login" replace />;
+    console.log('ProtectedRoute: No user found, redirecting to login');
+    console.log('Redirecting to /login from', location.pathname);
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
+  console.log('ProtectedRoute: User authenticated, rendering children');
   return <>{children}</>;
 };
