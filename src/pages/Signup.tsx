@@ -30,6 +30,7 @@ const Signup = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [signupError, setSignupError] = useState('');
+  const [message, setMessage] = useState<{ type: 'success' | 'error' | 'info'; text: string } | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -62,14 +63,38 @@ const Signup = () => {
     }
 
     setIsLoading(true);
-    const success = await signup(formData.email, formData.password, formData.name);
-    
-    if (success) {
-      navigate('/');
-    } else {
-      setSignupError('An account with this email already exists. Please try logging in instead.');
+    try {
+      const result = await signup(formData.email, formData.password, formData.name);
+      
+      if (result.success) {
+        // Show success message and redirect to login
+        setSignupError('');
+        setMessage({
+          type: 'success',
+          text: 'Account created successfully! Please check your email to verify your account before logging in.'
+        });
+        
+        // Clear form
+        setFormData({
+          name: '',
+          email: '',
+          password: '',
+          confirmPassword: ''
+        });
+        
+        // Redirect to login after a short delay
+        setTimeout(() => {
+          navigate('/login');
+        }, 5000);
+      } else {
+        setSignupError(result.error || 'An error occurred during signup. Please try again.');
+      }
+    } catch (error) {
+      console.error('Signup error:', error);
+      setSignupError('An unexpected error occurred. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   return (
@@ -82,6 +107,17 @@ const Signup = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          {message && (
+            <Alert 
+              variant={message.type === 'success' ? 'default' : 'destructive'} 
+              className="mb-4"
+            >
+              <AlertDescription>
+                {message.text}
+              </AlertDescription>
+            </Alert>
+          )}
+          
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <Label htmlFor="name" className="text-black">Full Name</Label>
@@ -162,17 +198,21 @@ const Signup = () => {
             <Button 
               type="submit" 
               className="w-full bg-blue-600 hover:bg-blue-700"
-              disabled={isLoading}
+              disabled={isLoading || (message?.type === 'success')}
             >
-              {isLoading ? 'Creating account...' : 'Create Account'}
+              {isLoading ? 'Creating Account...' : 'Sign Up'}
             </Button>
 
             <div className="text-center">
-              <p className="text-gray-600 text-sm">
+              <p className="text-center text-sm text-gray-600">
                 Already have an account?{' '}
-                <Link to="/login" className="text-blue-600 hover:text-blue-700 font-medium">
+                <Link to="/login" className="font-medium text-blue-600 hover:text-blue-500 hover:underline">
                   Sign in
                 </Link>
+              </p>
+              
+              <p className="text-xs text-center text-gray-500 mt-4">
+                By signing up, you agree to our Terms of Service and Privacy Policy.
               </p>
             </div>
           </form>

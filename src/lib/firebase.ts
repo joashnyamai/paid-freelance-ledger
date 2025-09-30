@@ -3,8 +3,22 @@ import {
   getAuth, 
   GoogleAuthProvider, 
   signInWithPopup,
-  User as FirebaseUser
+  User as FirebaseUser,
+  sendEmailVerification as firebaseSendEmailVerification,
+  sendPasswordResetEmail as firebaseSendPasswordResetEmail,
+  applyActionCode,
+  confirmPasswordReset as firebaseConfirmPasswordReset,
+  verifyPasswordResetCode as firebaseVerifyPasswordResetCode,
+  updateProfile as firebaseUpdateProfile
 } from "firebase/auth";
+
+type ActionCodeInfo = {
+  data: {
+    email?: string;
+    fromEmail?: string;
+  };
+  operation: string;
+};
 import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -56,7 +70,59 @@ export const signInWithGoogle = async () => {
     await createUserDocument(result.user);
     return result.user;
   } catch (error) {
-    console.error('Error signing in with Google:', error);
+    console.error("Error signing in with Google:", error);
+    throw error;
+  }
+};
+
+// Email verification
+export const sendEmailVerification = async (user: FirebaseUser) => {
+  try {
+    await firebaseSendEmailVerification(user);
+    return true;
+  } catch (error) {
+    console.error("Error sending verification email:", error);
+    throw error;
+  }
+};
+
+export const sendPasswordResetEmail = async (email: string) => {
+  try {
+    await firebaseSendPasswordResetEmail(auth, email);
+    return true;
+  } catch (error) {
+    console.error("Error sending password reset email:", error);
+    throw error;
+  }
+};
+
+export const verifyEmail = async (oobCode: string) => {
+  try {
+    await applyActionCode(auth, oobCode);
+    return true;
+  } catch (error) {
+    console.error("Error verifying email:", error);
+    throw error;
+  }
+};
+
+export const resetPassword = async (oobCode: string, newPassword: string) => {
+  try {
+    await firebaseConfirmPasswordReset(auth, oobCode, newPassword);
+    return true;
+  } catch (error) {
+    console.error("Error resetting password:", error);
+    throw error;
+  }
+};
+
+export const verifyPasswordResetOobCode = async (oobCode: string): Promise<string> => {
+  try {
+    // Verify the password reset code and return the associated email
+    const email = await firebaseVerifyPasswordResetCode(auth, oobCode);
+    return email;
+  } catch (error) {
+    console.error("Error verifying password reset code:", error);
     throw error;
   }
 };
