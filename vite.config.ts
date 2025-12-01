@@ -36,5 +36,5 @@ export default defineConfig(({ mode }) => {
       sourcemap: mode === 'development',
       minify: mode === 'production' ? 'esbuild' : false,
     },
-  },
-}));
+  };
+});
