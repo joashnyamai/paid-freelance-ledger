@@ -373,7 +373,7 @@ export default function Admin() {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="rounded-md border
+              <div className="rounded-md border">
                 <Table>
                   <TableHeader>
                     <TableRow>
