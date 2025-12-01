@@ -11,6 +11,8 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import PasswordReset from "./pages/PasswordReset";
 import EmailVerification from "./pages/EmailVerification";
+import Admin from "./pages/Admin";
+import AdminUserView from "./pages/AdminUserView";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +31,16 @@ const App = () => (
             <Route path="/" element={
               <ProtectedRoute>
                 <Index />
+              </ProtectedRoute>
+            } />
+            <Route path="/admin" element={
+              <ProtectedRoute>
+                <Admin />
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/user/:userId" element={
+              <ProtectedRoute>
+                <AdminUserView />
               </ProtectedRoute>
             } />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
